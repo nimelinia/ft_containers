@@ -7,6 +7,7 @@ include_directories(.)
 
 add_executable(project
 		main.cpp
-		Vector.hpp
+		vector.hpp
 		Stack.hpp
-		Map.hpp)
+		Map.hpp
+		Iterator.hpp)

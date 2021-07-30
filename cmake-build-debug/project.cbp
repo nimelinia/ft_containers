@@ -82,16 +82,19 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/project/Iterator.hpp">
+			<Option target="project"/>
+		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/Map.hpp">
 			<Option target="project"/>
 		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/Stack.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/Vector.hpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/project/main.cpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/main.cpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/project/vector.hpp">
 			<Option target="project"/>
 		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/CMakeLists.txt">
