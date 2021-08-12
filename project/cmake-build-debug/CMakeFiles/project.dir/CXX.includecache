@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../Iterator.hpp
+iostream
+-
+
+../vector.hpp
+iostream
+-
+Iterator.hpp
+../Iterator.hpp
+stdexcept
+-
+
+/Users/scopycat/Documents/ft_containers/project/main.cpp
+iostream
+-
+string
+-
+deque
+-
+vector.hpp
+-
+vector
+-
+stdlib.h
+-
+
