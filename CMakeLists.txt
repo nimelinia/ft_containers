@@ -10,4 +10,6 @@ add_executable(project
 		vector.hpp
 		Stack.hpp
 		Map.hpp
-		Iterator.hpp)
+		Iterator.hpp
+		vector_test.cpp
+		vector_test.hpp enable_if.hpp)

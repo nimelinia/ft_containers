@@ -6,27 +6,35 @@
 
 #IncludeRegexTransform: 
 
-../Iterator.hpp
+/Users/scopycat/Documents/ft_containers/project/Iterator.hpp
 iostream
 -
 
-../vector.hpp
+/Users/scopycat/Documents/ft_containers/project/enable_if.hpp
+
+/Users/scopycat/Documents/ft_containers/project/vector.hpp
 iostream
 -
 Iterator.hpp
-../Iterator.hpp
+/Users/scopycat/Documents/ft_containers/project/Iterator.hpp
+enable_if.hpp
+/Users/scopycat/Documents/ft_containers/project/enable_if.hpp
+stdexcept
+-
+limits
+-
 
-/Users/scopycat/Documents/ft_containers/project/main.cpp
-iostream
--
-string
--
-deque
--
+/Users/scopycat/Documents/ft_containers/project/vector_test.cpp
+vector_test.hpp
+/Users/scopycat/Documents/ft_containers/project/vector_test.hpp
+
+/Users/scopycat/Documents/ft_containers/project/vector_test.hpp
 vector.hpp
--
+/Users/scopycat/Documents/ft_containers/project/vector.hpp
 vector
 -
-stdlib.h
+iostream
+-
+time.h
 -
 

@@ -91,10 +91,19 @@
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/Stack.hpp">
 			<Option target="project"/>
 		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/project/enable_if.hpp">
+			<Option target="project"/>
+		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/main.cpp">
 			<Option target="project"/>
 		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/vector.hpp">
+			<Option target="project"/>
+		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/project/vector_test.cpp">
+			<Option target="project"/>
+		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/project/vector_test.hpp">
 			<Option target="project"/>
 		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/CMakeLists.txt">
