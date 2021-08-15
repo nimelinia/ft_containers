@@ -25,7 +25,9 @@ namespace ft {
 		typedef T&																	reference;
 		typedef const T&															const_reference;
 		typedef T*																	iterator;
+		typedef const T*															const_iterator;
 		typedef ReverseIterator<iterator>											reverse_iterator;
+		typedef ReverseIterator<const_iterator>										const_reverse_iterator;
 
 	private:
 		pointer																		m_begin;
@@ -41,7 +43,7 @@ namespace ft {
 		vector() : m_begin(NULL), m_end(NULL), m_size(0), m_capacity(0) {}													// конструктор по умолчанию
 
 		explicit vector(size_t n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
-			m_size(n), m_alloc(alloc), m_capacity(n)	// конструктор от количества элементов и элемента по умолчанию
+			m_size(n), m_alloc(alloc), m_capacity(n)																		// конструктор от количества элементов и элемента по умолчанию
 		{
 			m_begin = m_alloc.allocate(n);
 			m_end = m_begin + n;
@@ -53,7 +55,6 @@ namespace ft {
 						typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0) :				// конструктор от двух итераторов. enable if используется для того, чтобы отсечь станартные типы данных
 			m_size(last - first), m_alloc(alloc)
 		{
-			//  нужно добавить enable if
 			m_begin = m_alloc.allocate(last - first);
 			m_end = m_begin + m_size;
 			for (size_t i = 0; i < m_size; ++i)
@@ -98,7 +99,17 @@ namespace ft {
 			return (m_begin);
 		};
 
+		const_iterator			begin() const
+		{
+			return (m_begin);
+		};
+
 		iterator				end()
+		{
+			return (m_end);
+		}
+
+		const_iterator			end() const
 		{
 			return (m_end);
 		}
@@ -108,7 +119,12 @@ namespace ft {
 			return (reverse_iterator(end()));
 		}
 
-		reverse_iterator		rend()
+		const_reverse_iterator	rbegin() const
+		{
+			return (reverse_iterator(end()));
+		}
+
+		const_reverse_iterator	rend() const
 		{
 			return (reverse_iterator(begin()));
 		}
@@ -256,7 +272,6 @@ namespace ft {
 		void					assign(InputIterator first, InputIterator last,
 									typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)	// метод присвоения значений диапазону
 		{
-			// нужно добавить enable if
 			this->clear();
 			for (pointer p = first; p != last; ++p)
 				push_back(*p);
@@ -340,7 +355,6 @@ namespace ft {
 
 		iterator				erase(iterator position)																	// позволяет удалить один элемент из контейнера
 		{
-			// нужно менять размер и указатель на конец массива
 			const ptrdiff_t n = position - m_begin;
 			_move(position, m_end, -1);
 			m_size--;
@@ -371,27 +385,12 @@ namespace ft {
 			m_size = 0;
 		}
 
-		const T *getMBegin() const
-		{
-			return m_begin;
-		}
-
-		const T *getMEnd() const
-		{
-			return m_end;
-		}
-
-		size_t getMSize() const
+		size_t					getMSize() const
 		{
 			return m_size;
 		}
 
-		Alloc getMAlloc() const
-		{
-			return m_alloc;
-		}
-
-		size_t getMCapacity() const
+		size_t					getMCapacity() const
 		{
 			return m_capacity;
 		}

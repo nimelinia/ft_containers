@@ -6,7 +6,8 @@
 #define MAP_HPP
 
 namespace ft {
-	class Map {
+	class map
+	{
 
 	};
 

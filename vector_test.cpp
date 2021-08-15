@@ -62,97 +62,45 @@ void vector_test::start_vector_tests()
 
 	std::vector<int>	vect1(10, 5);
 	ft::vector<int>		vect2(10, 5);
-	std::cout << "standart vector:      ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector:            ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	std::string method = "";
+	print_vectors(vect1, vect2, method);
 	ft::vector<int>		vect3(vect2);
-	std::cout << "\nmy vector after copy: ";
-	for (size_t i = 0; i < vect3.size(); ++i)
-		std::cout << vect3.at(i) << " ";
-	ft::vector<int>		vect4;
-	vect4 = vect3;
-	std::cout << "\nmy vector after =:    ";
-	for (size_t i = 0; i < vect4.size(); ++i)
-		std::cout << vect4.at(i) << " ";
-
+	method = "after copy";
+	print_vectors(vect1, vect3, method);
 	vect1.insert(vect1.begin() + 7, 0);
 	vect2.insert(vect2.begin() + 7, 0);
-	std::cout << "\nstandart vector after insert: ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after insert:       ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
-
+	method = "after insert";
+	print_vectors(vect1, vect2, method);
 	vect1.insert(vect1.begin() + 3, 5, 1);
 	vect2.insert(vect2.begin() + 3, 5, 1);
-	std::cout << "\nstandart vector after insert: ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after insert:       ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	print_vectors(vect1, vect2, method);
 	std::vector<int>	vect5(5, 8);
 	ft::vector<int>		vect6(5, 8);
 	vect1.insert(vect1.begin() + 1, vect5.begin() + 1, vect5.begin() + 4);
 	vect2.insert(vect2.begin() + 1, vect6.begin() + 1, vect6.begin() + 4);
-	std::cout << "\nstandart vector after insert: ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after insert:       ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	print_vectors(vect1, vect2, method);
 	vect1.erase(vect1.begin() + 1);
 	vect2.erase(vect2.begin() + 1);
-	std::cout << "\nstandart vector after erase:  ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after erase:        ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	method = "after erase";
+	print_vectors(vect1, vect2, method);
 	vect1.erase(vect1.begin() + 2, vect1.begin() + 4);
 	vect2.erase(vect2.begin() + 2, vect2.begin() + 4);
-	std::cout << "\nstandart vector after erase:  ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after erase:        ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	print_vectors(vect1, vect2, method);
 	vect1.clear();
 	vect2.clear();
-	std::cout << "\nstandart vector after clear:  ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after clear:        ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	method = "after clear";
+	print_vectors(vect1, vect2, method);
 	vect1.swap(vect5);
 	vect2.swap(vect6);
-	std::cout << "\nstandart vector after swap:  ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after swap:        ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	method = "after swap";
+	print_vectors(vect1, vect2, method);
 	vect1.assign(vect5.begin() + 1, vect5.begin() + 5);
 	vect2.assign(vect6.begin() + 1, vect6.begin() + 5);
-	std::cout << "\nstandart vector after assign:  ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after assign:        ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	method = "after assign";
+	print_vectors(vect1, vect2, method);
 	vect1.assign(3, 4);
 	vect2.assign(3, 4);
-	std::cout << "\nstandart vector after assign:  ";
-	for (size_t i = 0; i < vect1.size(); ++i)
-		std::cout << vect1.at(i) << " ";
-	std::cout << "\nmy vector after assign:        ";
-	for (size_t i = 0; i < vect2.size(); ++i)
-		std::cout << vect2.at(i) << " ";
+	print_vectors(vect1, vect2, method);
 	try
 	{
 //	vect1.at(12);
@@ -162,4 +110,31 @@ void vector_test::start_vector_tests()
 	{
 		std::cout << "\n" << e.what() << std::endl;
 	}
+	std::cout << "standart vector's size before resize: " << vect1.size() << std::endl;
+	std::cout << "my vector's size before resize:       " << vect2.size() << std::endl;
+	vect1.resize(20);
+	vect2.resize(20);
+	std::cout << "standart vector's size after resize: " << vect1.size() << std::endl;
+	std::cout << "my vector's size after resize:       " << vect2.size() << std::endl;
+	method = "after resize";
+	print_vectors(vect1, vect2, method);
+	std::cout << "standart vector's front: " << vect1.front() << std::endl;
+	std::cout << "my vector's front:       " << vect2.front() << std::endl;
+	vect1.push_back(111);
+	vect2.push_back(111);
+	std::cout << "standart vector's back: " << vect1.back() << std::endl;
+	std::cout << "my vector's back:       " << vect2.back() << std::endl;
+}
+
+template<class T>
+		void vector_test::print_vectors(std::vector<T> &vect1, ft::vector<T> &vect2, std::string &method)
+{
+	std::cout << "standart vector " << method <<  ": ";
+	for (size_t i = 0; i < vect1.size(); ++i)
+		std::cout << vect1.at(i) << " ";
+	std::cout << "\n";
+	std::cout << "my vector " << method <<  ":       ";
+	for (size_t i = 0; i < vect2.size(); ++i)
+		std::cout << vect2.at(i) << " ";
+	std::cout << "\n";
 }
