@@ -9,7 +9,7 @@ add_executable(project
 		main.cpp
 		vector.hpp
 		Stack.hpp
-		Map.hpp
+		map.hpp
 		Iterator.hpp
 		vector_test.cpp
-		vector_test.hpp enable_if.hpp)
+		vector_test.hpp enable_if.hpp pair.hpp)

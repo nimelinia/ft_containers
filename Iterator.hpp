@@ -25,6 +25,10 @@ namespace ft {
 //		size_t distance (Iterator first, Iterator last);
 
 
+	};
+
+	class mapIterator
+	{
 
 	};
 

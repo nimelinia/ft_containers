@@ -8,7 +8,7 @@
 #include "vector.hpp"
 #include <vector>
 #include <iostream>
-#include <time.h>
+#include <ctime>
 
 #define BUFFER_SIZE 4096
 
@@ -29,7 +29,7 @@ private:
 	ft::vector<Buffer>			random_buf_my;
 
 	template<class T>
-			void						print_vectors(std::vector<T> &vect1, ft::vector<T> &vect2, std::string &method);
+	void						print_vectors(std::vector<T> &vect1, ft::vector<T> &vect2, std::string &method);
 
 public:
 	vector_test();

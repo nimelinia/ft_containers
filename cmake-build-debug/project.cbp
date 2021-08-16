@@ -97,6 +97,9 @@
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/main.cpp">
 			<Option target="project"/>
 		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/project/pair.hpp">
+			<Option target="project"/>
+		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/project/vector.hpp">
 			<Option target="project"/>
 		</Unit>
