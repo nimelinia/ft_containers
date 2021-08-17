@@ -270,7 +270,7 @@ namespace ft {
 		}
 		template <class InputIterator>
 		void					assign(InputIterator first, InputIterator last,
-									typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)	// метод присвоения значений диапазону
+									typename enable_if<!is_integral<InputIterator>::value>::type * = 0)						// метод присвоения значений диапазону
 		{
 			this->clear();
 			for (pointer p = first; p != last; ++p)
