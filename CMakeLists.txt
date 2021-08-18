@@ -12,4 +12,7 @@ add_executable(project
 		map.hpp
 		Iterator.hpp
 		vector_test.cpp
-		vector_test.hpp enable_if.hpp pair.hpp redblacktree.hpp)
+		vector_test.hpp
+		enable_if.hpp
+		pair.hpp
+		redblacktree.hpp)

@@ -11,6 +11,7 @@
 //#include <stack>
 //#include <vector>
 #include "vector_test.hpp"
+#include "map.hpp"
 //namespace ft = std;
 //#else
 //#include <Map.hpp>
@@ -53,6 +54,7 @@
 int main(int argc, char** argv) {
 	vector_test Test1;
 	Test1.start_vector_tests();
+	ft::map<int, std::string>
 //	if (argc != 2)
 //	{
 //		std::cerr << "Usage: ./test seed" << std::endl;
