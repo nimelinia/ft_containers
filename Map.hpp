@@ -8,17 +8,18 @@
 #include "Iterator.hpp"
 #include "redblacktree.hpp"
 #include <iostream>
+#include <iomanip>
 
 namespace ft {
 
-	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key, T> > >
-			class map : public redblacktree<const Key, T, std::pair<const Key, T>, Compare, Alloc >
+	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<pair<const Key, T> > >
+	class map : public redblacktree<const Key, T, pair<const Key, T>, Compare, Alloc >
 	{
 	public:
-		typedef redblacktree<const Key, T, std::pair<const Key, T>, Compare, Alloc>			Base;
+		typedef redblacktree<const Key, T, pair<const Key, T>, Compare, Alloc>				Base;
 		typedef Key																			key_type;
 		typedef T																			mapped_type;
-		typedef std::pair<const Key, T>															value_type;
+		typedef pair<const Key, T>															value_type;
 		typedef size_t																		size_type;
 		typedef ptrdiff_t																	difference_type;
 		typedef Compare																		key_compare;
@@ -30,15 +31,14 @@ namespace ft {
 		typedef typename allocator_type::const_pointer										const_pointer;
 		typedef mapIterator<value_type>														iterator;
 		typedef mapIterator<const value_type>												const_iterator;
-		typedef reverse_iterator<iterator> 													reverse_iterator;
-		typedef revers_iterator<const_iterator>												const_reverse_iterator;
-//		typedef redblacktree																base_type;
+//		typedef reverse_iterator<iterator> 													reverse_iterator;
+//		typedef revers_iterator<const_iterator>												const_reverse_iterator;
 
 		class value_compare
 		{
 		protected:
-			friend class map;
-			Compare				compare;
+			friend class	map;
+			Compare			compare;
 			value_compare (Compare c) : compare(c) {}
 		public:
 			typedef bool		result_type;
@@ -46,65 +46,150 @@ namespace ft {
 			typedef value_type	second_argument_type;
 			bool operator() (const value_type& x, const value_type& y) const { return compare(x.first, y.first); }
 		};
-
-		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) {}
+	private:
+//		Base 		m_data;
+		Alloc		m_alloc;
+	public:
+		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+			: Base()
+		{}
 
 		template <class InputIterator>
 		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
-			 const allocator_type& alloc = allocator_type()) {}
+			 const allocator_type& alloc = allocator_type(),
+			 typename enable_if<!is_integral<InputIterator>::value>::type * = 0) : Base()
+		{
+			this->insert(first, last);
+		}
 
-		map (const map& x) {}
+		map (const map& x)
+		{
+			this->insert(x.begin(), x.end());
+		}
 
-		~map() {}
+		~map()
+		{
+			this->clear();
+		}
 
-		map& operator= (const map& x) {}
+		map& operator= (const map& x)
+		{
+			if (*this != x)
+			{
+				this->clear();
+				this->insert(x.begin(), x.end());
+			}
+			return (*this);
+		}
 
-		iterator begin() {}
+		iterator begin()
+		{
+			return (iterator(Base::m_begin));
+		}
 
-		const_iterator begin() const {}
+		const_iterator begin() const
+		{
+			return (Base::m_begin);
+		}
 
-		iterator end() {}
+		iterator end()
+		{
+			return (Base::m_end);
+		}
 
-		const_iterator end() const {}
+		const_iterator end() const
+		{
+			return (Base::m_data);
+		}
 
-		reverse_iterator rbegin() {}
+//		reverse_iterator rbegin() {}
+//
+//		const_reverse_iterator rbegin() const {}
+//
+//		reverse_iterator rend() {}
+//
+//		const_reverse_iterator rend() const {}
 
-		const_reverse_iterator rbegin() const {}
+		bool empty() const
+		{
+			return (Base::m_size == 0);
+		}
 
-		reverse_iterator rend() {}
+		size_type size() const
+		{
+			return (Base::m_size);
+		}
 
-		const_reverse_iterator rend() const {}
+		size_type max_size() const
+		{
+			return (m_alloc.max_size());
+		}
 
-		bool empty() const {}
+		mapped_type& operator[] (const key_type& k)
+		{
+			return (*((this->insert(make_pair(k, mapped_type()))).first)).second;
+		}
 
-		size_type size() const {}
+		pair<iterator,bool> insert (const value_type& val)
+		{
+			return (ft::make_pair(Base::insertNode(val), true));
+		}
 
-		size_type max_size() const {}
-
-		mapped_type& operator[] (const key_type& k) {}
-
-		pair<iterator,bool> insert (const value_type& val) {}
-
-		iterator insert(iterator position, const value_type& val) {}
+		iterator insert(iterator position, const value_type& val)
+		{
+			(void) position;
+			return (insert(val).first);
+		}
 
 		template <class InputIterator>
-		void insert(InputIterator first, InputIterator last) {}
+		void insert(InputIterator first, InputIterator last,
+				typename enable_if<!is_integral<InputIterator>::value>::type * = 0)
+		{
+			for(; first != last; ++first)
+				insert(*first);
+		}
 
-		void erase (iterator position);
+		void erase (iterator position)
+		{
+			Base::deleteNode(position);
+		}
 
-		size_type erase (const key_type& k) {}
+		size_type erase (const key_type& k)
+		{
+			Base::deleteNode(Base::findNode(*find(k)));
+			return (1);
+		}
 
-		void erase (iterator first, iterator last) {}
+		void erase (iterator first, iterator last)
+		{
+			for(; first != last; ++first)
+				Base::deleteNode(Base::findNode(*first));
+		}
 
-		void swap (map& x) {}
+		void swap (map& x)
+		{
+			std::swap(Base::m_root, x.m_root);
+			std::swap(Base::m_begin, x.m_begin);
+			std::swap(Base::m_end, x.m_begin);
+			std::swap(Base::m_size, x.m_size);
+			std::swap(Base::m_compare, x.m_compare);
+			std::swap(Base::m_alloc, x.m_alloc);
+			std::swap(m_alloc, x.m_alloc);
+		}
 
-		void clear() {}
+		void clear()
+		{
+			erase(begin(), end());
+		}
 
 		key_compare key_comp() const {}
 
 		value_compare value_comp() const {}
 
-		iterator find (const key_type& k) {}
+		iterator find (const key_type& k)
+		{
+			return (Base::findNodebyKey(k));
+		}
 
 		const_iterator find (const key_type& k) const {}
 
@@ -124,11 +209,15 @@ namespace ft {
 
 		allocator_type get_allocator() const {}
 
-	private:
-		void _void;
-
+	public:
+		void print_map()
+		{
+			Base::_print(Base::m_root, 0);
+			std::cout << "\033[1;31m" << "--------------- end of tree ---------------" << "\033[0m" << "\n ";
+		}
 	};
 
 }
+
 
 #endif //MAP_HPP

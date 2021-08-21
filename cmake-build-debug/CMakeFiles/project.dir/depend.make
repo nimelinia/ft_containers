@@ -5,11 +5,16 @@ CMakeFiles/project.dir/main.cpp.o: \
  ../Iterator.hpp \
  ../enable_if.hpp \
  ../main.cpp \
+ ../map.hpp \
+ ../pair.hpp \
+ ../redblacktree.hpp \
  ../vector.hpp \
  ../vector_test.hpp
 CMakeFiles/project.dir/vector_test.cpp.o: \
  ../Iterator.hpp \
  ../enable_if.hpp \
+ ../pair.hpp \
+ ../redblacktree.hpp \
  ../vector.hpp \
  ../vector_test.cpp \
  ../vector_test.hpp

@@ -335,7 +335,7 @@ namespace ft {
 		}
 		template <class InputIterator>
 		void					insert (iterator position, InputIterator first, InputIterator last,
-									typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
+										typename enable_if<!is_integral<InputIterator>::value>::type * = 0)
 		{
 			const ptrdiff_t n = last - first;
 			const ptrdiff_t pos = position - m_begin;

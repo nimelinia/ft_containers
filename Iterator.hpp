@@ -5,6 +5,8 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
+#include "redblacktree.hpp"
+#include "enable_if.hpp"
 #include <iostream>
 
 namespace ft {
@@ -24,12 +26,6 @@ namespace ft {
 		};
 //		size_t distance (Iterator first, Iterator last);
 
-
-	};
-
-	template <class T>
-	class mapIterator
-	{
 
 	};
 
@@ -91,6 +87,78 @@ namespace ft {
 
 
 	};
+
+	template<class T>
+	class mapIterator
+	{
+	public:
+		typedef std::bidirectional_iterator_tag               iterator_category;
+		typedef T                                             value_type;
+		typedef std::ptrdiff_t                                difference_type;
+		typedef value_type                                    *pointer;
+		typedef value_type                                    &reference;
+		typedef mapIterator<T>                                 self_type;
+		typedef rbtNode<typename std::remove_const<value_type>::type> node_type;
+		mapIterator(node_type *node = NULL) : _node(node) {};
+	private:
+		node_type *_node;
+	public:
+		template<class Some>
+		mapIterator(const mapIterator<Some> &it, typename enable_if<!std::is_const<Some>::value>::type* = 0)
+		{
+			_node = it.GetNode();
+		}
+
+		mapIterator(const self_type &it)
+		{
+			_node = it.GetNode();
+		}
+
+		node_type *GetNode() const
+		{
+			return _node;
+		}
+
+		bool operator==(const mapIterator &rhs) const
+		{
+			return _node == rhs._node;
+		}
+
+		bool operator!=(const mapIterator &rhs) const
+		{
+			return !(rhs == *this);
+		}
+
+		self_type &operator++()
+		{
+//			_node = increment(_node);
+			return *this;
+		}
+
+		self_type operator++(int) {
+			self_type tmp = *this;
+//			this->_node = increment(this->_node);
+			return tmp;
+		}
+
+		self_type &operator--() {
+//			_node = decrement(_node);
+			return *this;
+		}
+
+		self_type operator--(int)
+		{
+			self_type tmp = *this;
+//			this->_node = decrement(this->_node);
+			return tmp;
+		}
+
+		reference operator*() { return const_cast<reference>(*_node->value); }
+		pointer operator->() { return &(_node->value); }
+
+		reference operator*() const { return const_cast<reference>(*_node->value); }
+		pointer operator->() const { return &(_node->value); }
+		};
 }
 
 #endif //ITERATOR_HPP

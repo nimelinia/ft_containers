@@ -54,7 +54,60 @@
 int main(int argc, char** argv) {
 	vector_test Test1;
 	Test1.start_vector_tests();
-	ft::map<int, std::string>
+	ft::map<int, std::string>	map_;
+	ft::pair<int, std::string>	pair1 = ft::make_pair(1, "lalalla");
+	map_.insert(pair1);
+	map_.print_map();
+	map_.insert(ft::make_pair(2, "hello"));
+	map_.print_map();
+	map_.insert(ft::make_pair(0, "hellfo"));
+	map_.print_map();
+	map_.insert(ft::make_pair(-1, "ahellfo"));
+	map_.print_map();
+	map_.insert(ft::make_pair(3, "hellfo"));
+	map_.print_map();
+//	map_.erase(0);
+//	map_.print_map();
+	map_.insert(ft::make_pair(3, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(8, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(4, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(-27, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(-11, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(115, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(5, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(22, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(13, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(23, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(24, "lala"));
+	map_.print_map();
+	map_.insert(ft::make_pair(25, "lala"));
+	map_.print_map();
+
+//	void print(treeNode* root, int deep) {
+//		if (!ft_null(root)) {
+//			print(root->_right, deep + 1);
+//			if (root->_col == BLACK)
+//				std::cout << "\e[34m";
+//			else if (root->_col == RED)
+//				std::cout << "\e[33m";
+//			for (int i = 0; i < deep; i++)
+//				std::cout << "    ";
+//			if (!ft_null(root))
+//				std::cout << root->_val.first << "\e[0m" << "\n";
+//			print(root->_left, deep + 1);
+//		}
+//		std::cout << "\e[0m";
+
 //	if (argc != 2)
 //	{
 //		std::cerr << "Usage: ./test seed" << std::endl;

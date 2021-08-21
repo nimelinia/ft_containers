@@ -5,36 +5,34 @@
 #ifndef REDBLACKTREE_HPP
 #define REDBLACKTREE_HPP
 
+#include <iomanip>
 #include "pair.hpp"
 
 namespace ft
 {
-	struct rbtBase
-	{
-		rbtBase*	m_right;
-		rbtBase*	m_left;
-		rbtBase*	m_parent;
-		bool 		m_rcolour;																								// если true, то rea
-	};
-#define NIL &sentinel
-rbtBase sentinel = { NIL, NIL, 0, false};
-
-	template <class Key, class T>
+	template <class Content>
 	struct rbtNode
 	{
-		std::pair<const Key, T>	value;																						// убрать std, когда напишу свой pair
-		rbtBase				base;
+		Content*	value;
+		rbtNode*	m_right;
+		rbtNode*	m_left;
+		rbtNode*	m_parent;
+		bool 		m_rcolour;
+
+		rbtNode() : value(), m_right(0), m_left(0), m_parent(0), m_rcolour(false)  {}
+		rbtNode(rbtNode *other) : value(other->value), m_right(other->m_right), m_left(other->m_left),
+			m_parent(other->m_parent), m_rcolour(other->m_rcolour) {}
 	};
 
 	template <class Key, class Value, class Content, class Compare = std::less<Key>,
-			class Alloc = std::allocator<std::pair<const Key,Value> > >
-	class redblacktree : public rbtBase
+			class Alloc = std::allocator<pair<const Key,Value> > >
+	class redblacktree
 	{
 		typedef ptrdiff_t															difference_type;
 		typedef Key																	key_type;
 		typedef Value																mapped_type;
 		typedef Content																value_type;
-		typedef rbtNode<key_type, value_type>										node_type;
+		typedef rbtNode<Content>													node_type;
 		typedef	Compare																key_compare;
 		typedef Alloc																allocator_type;
 		typedef	value_type&															reference;
@@ -42,13 +40,27 @@ rbtBase sentinel = { NIL, NIL, 0, false};
 		typedef	value_type*															pointer;
 		typedef	const value_type*													const_pointer;
 		typedef	size_t																size_type;
+		typedef typename allocator_type::template rebind<rbtNode<Content> >::other	node_allocator;
 
-		typedef tree_iterator<value_type, pointer, reference, Compare >				iterator;
-		typedef tree_terator<value_type, const_pointer, const_reference, Compare >	const_iterator;
-		typedef ReverseIterator<iterator>											reverse_iterator;
-		typedef ReverseIterator<const_iterator>										const_reverse_iterator;
+		class value_compare
+		{
+		protected:
+			friend class	redblacktree<const Key, Value, Content, Compare, Alloc>;
+			Compare			compare;
+			value_compare(Compare c) : compare(c) {}
+		public:
+			typedef bool		result_type;
+			typedef value_type 	first_argument_type;
+			typedef value_type 	second_argument_type;
+			bool operator() (const value_type & x, const value_type& y) const { return compare(x.first, y.first); }
+		};
+//		typedef tree_iterator<value_type, pointer, reference, Compare >				iterator;
+//		typedef tree_terator<value_type, const_pointer, const_reference, Compare >	const_iterator;
+//		typedef ReverseIterator<iterator>											reverse_iterator;
+//		typedef ReverseIterator<const_iterator>										const_reverse_iterator;
 
 	protected:
+		node_type		*nil;
 		node_type		*m_root;
 		node_type		*m_begin;
 		node_type		*m_end;
@@ -58,11 +70,27 @@ rbtBase sentinel = { NIL, NIL, 0, false};
 		key_compare		m_compare;
 
 	public:
-		redblacktree() : m_root(NIL), m_begin(NIL), m_end(NIL), m_size(0)
+		redblacktree() : nil(0), m_root(nil), m_begin(nil), m_end(nil), m_size(0)
 		{
 		}
 
+		~redblacktree()
+		{
+			if (m_root != 0)
+				m_alloc.destroy(m_root->value);
+			m_alloc.deallocate(m_root->value, 1);
+		}
 	protected:
+
+		node_type*				createNode(value_type &val)
+		{
+			node_type* x;
+			node_allocator allocator;
+			x = allocator.allocate(1);
+			x->value = m_alloc.allocate(1);
+			m_alloc.construct(x->value, val);
+			return (x);
+		}
 
 		node_type*				insertNode(value_type value)
 		{
@@ -70,34 +98,38 @@ rbtBase sentinel = { NIL, NIL, 0, false};
 
 			current = m_root;
 			parent = 0;
-			while (current != NIL) {
-				if (value == m_root->value)
+			while (current != nil) {
+				if (value.first == current->value->first)
+				{
+					m_alloc.destroy(current->value);
+					m_alloc.construct(current->value, value);
 					return (current);
+				}
 				parent = current;
-				if (value < current->value)
-					current = current->base.m_left;
+				if (m_compare(value.first, current->value->first))
+					current = current->m_left;
 				else
-					current = current->base.m_right;
+					current = current->m_right;
 			}
 
-			m_alloc.allocate(x);
-			x->value = value;
-			x->base.m_parent = parent;
-			x->base.m_left = NIL;
-			x->base.m_right = NIL;
-			x->base.m_rcolour = true;
+			x = createNode(value);
+			x->m_parent = parent;
+			x->m_left = nil;
+			x->m_right = nil;
+			x->m_rcolour = true;
 
 			if (parent)
 			{
-				if(value < parent->value)
-					parent->left = x;
+				if(m_compare(value.first, parent->value->first))
+					parent->m_left = x;
 				else
-					parent->right = x;
+					parent->m_right = x;
 			}
 			else
 				m_root = x;
 
 			balance_after_insert(x);
+			m_size++;
 			return(x);
 		}
 
@@ -105,178 +137,228 @@ rbtBase sentinel = { NIL, NIL, 0, false};
 		{
 			node_type *x, *y;
 
-			if (!node_for_delete || node_for_delete == NIL)
+			if (!node_for_delete || node_for_delete == nil)
 				return;
 
 
-			if (node_for_delete->base.m_left == NIL || node_for_delete->base.m_right == NIL)
+			if (node_for_delete->m_left == nil || node_for_delete->m_right == nil)
 				y = node_for_delete;
 			else
 			{
-				y = node_for_delete->base.m_right;
-				while (y->base.m_left != NIL)
-					y = y->base.m_left;
+				y = node_for_delete->m_right;
+				while (y->m_left != nil)
+					y = y->m_left;
 			}
 
-			if (y->base.m_left != NIL)
-				x = y->left;
+			if (y->m_left != nil)
+				x = y->m_left;
+			else if (node_for_delete != m_root)
+				x = y->m_right;
 			else
-				x = y->right;
+				x = node_for_delete->m_left;
 
-			x->base.m_parent = y->base.m_parent;
-			if (y->base.m_parent)
+			if (x != node_for_delete->m_left)
+				x->m_parent = y->m_parent;
+			else
 			{
-				if (y == y->base.m_parent->m_left)
-					y->base.m_parent->m_lefts = x;
+				x->m_parent = y->m_parent->m_left;
+			}
+			if (y->m_parent)
+			{
+				if (y == y->m_parent->m_left)
+					y->m_parent->m_left = x;
 				else
-					y->base.m_parent->m_right = x;
+					y->m_parent->m_right = x;
 			}
 			else
 				m_root = x;
 
 			if (y != node_for_delete)
+			{
 				node_for_delete->value = y->value;
-			if (!y->base.m_rcolour)
+				if (node_for_delete->m_right->m_left->value == x->value)
+					node_for_delete->m_right->m_left = NULL;
+			}
+			if (!y->m_rcolour)
 				balance_after_delete(x);
-			m_alloc.destroy(y);
+			m_size--;
+			m_alloc.destroy(y->value);
 		}
 
 		node_type* findNode(value_type value)
 		{
-			node_type current;
+			node_type* current = m_root;
 
-			while (current != NIL)
+			while (current != nil)
 			{
-				if (current.value == value)
+				if (*current->value == value)
 					return (current);
 				else
-					if (value < current.value)
-						current = current.base.m_left;
+					if (m_compare(value.first, current->value->first))
+						current = current->m_left;
 					else
-						current = current.base.m_right;
+						current = current->m_right;
 			}
 			return (0);
 		}
 
+		node_type* findNodebyKey(key_type &key)
+		{
+			node_type* it(m_root);
+
+			while (it != m_begin && it != m_end)
+			{
+				if (m_compare(key, it->value->first))
+					it = it->m_left;
+				else if (m_compare(it->value->first, key))
+					it = it->m_right;
+				else
+					return (it);
+			}
+			return (m_end);
+		}
+
 		void					balance_after_insert(node_type *node_ins)
 		{
-			while (node_ins != m_root && node_ins->base.m_parent->m_rcolour)
+			bool rotate = false;
+
+			while (node_ins != m_root && node_ins->m_parent->m_rcolour)
 			{
-				if (node_ins->parent == node_ins->parent->parent->left)
+				if (node_ins->m_parent->m_parent && node_ins->m_parent == node_ins->m_parent->m_parent->m_left)
 				{
-					node_type *buf = node_ins->base.m_parent->m_right;
-					if (buf->base.m_rcolour)
+					node_type *buf = node_ins->m_parent->m_right;
+					if (buf && buf->m_rcolour)
 					{
-						node_ins->base.m_parent->m_rcolour = false;
-						buf->base.m_rcolour = false;
-						node_ins->base.m_parent->m_parent->m_rcolour = true;
-						node_ins = node_ins->base.m_parent->m_parent;
+						node_ins->m_parent->m_rcolour = false;
+						buf->m_rcolour = false;
+						node_ins->m_parent->m_parent->m_rcolour = true;
+						node_ins = node_ins->m_parent;
 					}
 					else
 					{
-						if (node_ins == node_ins->base.m_parent->m_right)
+						if (node_ins == node_ins->m_parent->m_right)
 						{
-							node_ins = node_ins->base.m_parent;
+							node_ins = node_ins->m_parent;
 							rotate_left(node_ins);
+							rotate = true;
 						}
-						node_ins->base.m_parent->m_rcolour = false;
-						node_ins->base.m_parent->m_parent->m_rcolour = true;
-						rotate_right(node_ins->base.m_parent->m_parent);
+						node_ins->m_parent->m_rcolour = false;
+						node_ins->m_parent->m_parent->m_rcolour = true;
+//						rotate_right(node_ins->m_parent);
+						if (rotate)
+							rotate_right(node_ins->m_parent->m_parent);
+						else
+							rotate_right(node_ins->m_parent);
 					}
 				}
 				else
 				{
-					node_type *buf = node_ins->base.m_parent->m_left;
-					if (buf->base.m_rcolour)
+					if (node_ins->m_parent->m_parent)
 					{
-						node_ins->base.m_parent->m_rcolour = false;
-						buf->base.m_rcolour = false;
-						node_ins->base.m_parent->m_parent->m_rcolour = true;
-						node_ins = node_ins->base.m_parent->m_parent;
-					}
-					else
-					{
-						if (node_ins == node_ins->base.m_parent->m_left)
+						node_type *buf = node_ins->m_parent->m_left;
+						if (buf && buf->m_rcolour)
 						{
-							node_ins = node_ins->base.m_parent;
-							rotate_right(node_ins);
+							node_ins->m_parent->m_rcolour = false;
+							buf->m_rcolour = false;
+							node_ins->m_parent->m_parent->m_rcolour = true;
+							node_ins = node_ins->m_parent;
 						}
+						else
+						{
+							if (node_ins == node_ins->m_parent->m_left)
+							{
+								node_ins = node_ins->m_parent;
+								rotate_right(node_ins);
+								rotate = true;
+							}
 
-						node_ins->base.m_parent->m_rcolour = false;
-						node_ins->base.m_parent->m_parent->m_parent->m_rcolour = true;
-						rotate_left(node_ins->base.m_parent->m_parent);
-					}
+							node_ins->m_parent->m_rcolour = false;
+							node_ins->m_parent->m_parent->m_rcolour = true;
+//							rotate_left(node_ins->m_parent);
+							if (rotate)
+								rotate_left(node_ins->m_parent->m_parent);
+							else
+								rotate_left(node_ins->m_parent);
+						}
+					} else
+						break;
+//					{
+//						balancing(node_ins->m_parent);
+//						node_ins = node_ins->m_parent;
+//					}
+
 				}
+				rotate = false;
 			}
-			m_root->base.m_rcolour = false;
+			m_root->m_rcolour = false;
 		}
 
 		void					balance_after_delete(node_type *node_del)
 		{
 
-			while (node_del != m_root && !node_del->base.m_rcolour)
+			while (node_del != m_root && !node_del->m_rcolour)
 			{
-				if (node_del == node_del->base.m_parent->m_left)
+				if (node_del == node_del->m_parent->m_left)
 				{
-					node_type *buf = node_del->base.m_parent->m_right;
-					if (buf->base.m_rcolour)
+					node_type *buf = node_del->m_parent->m_right;
+					if (buf->m_rcolour)
 					{
-						buf->base.m_rcolour = false;
-						node_del->base.m_parent->m_rcolour = true;
-						rotate_left(node_del->base.m_parent);																// проверить, что моя функция делает то, что нужно
-						buf = node_del->base.m_parent->m_right;
+						buf->m_rcolour = false;
+						node_del->m_parent->m_rcolour = true;
+						rotate_left(node_del->m_parent);																// проверить, что моя функция делает то, что нужно
+						buf = node_del->m_parent->m_right;
 					}
-					if (!buf->base.m_left->m_rcolour && !buf->base.m_right->m_rcolour)
+					if (!buf->m_left->m_rcolour && !buf->m_right->m_rcolour)
 					{
-						buf->base.m_rcolour = true;
-						node_del = node_del->base.m_parent;
+						buf->m_rcolour = true;
+						node_del = node_del->m_parent;
 					}
 					else
 					{
-						if (!buf->base.m_right->m_rcolours)
+						if (!buf->m_right->m_rcolour)
 						{
-							buf->base.m_left->m_rcolour = false;
-							buf->base.m_rcolour = true;
+							buf->m_left->m_rcolour = false;
+							buf->m_rcolour = true;
 							rotate_right(buf);																				// проверить, что моя функция делает то, что нужно и смотреть, не перекрашиваю я ли лишний раз
-							buf = node_del->base.m_parent->m_right;
+							buf = node_del->m_parent->m_right;
 						}
-						buf->base.m_rcolour = node_del->base.m_parent->m_rcolour;
-						node_del->base.m_parent->m_rcolour = false;
-						buf->base.m_right->m_rcolour = false;
-						rotate_left(node_del->base.m_parent);
+						buf->m_rcolour = node_del->m_parent->m_rcolour;
+						node_del->m_parent->m_rcolour = false;
+						buf->m_right->m_rcolour = false;
+						rotate_left(node_del->m_parent);
 						node_del = m_root;
 					}
 				}
 				else
 				{
-					node_type *buf = node_del->base.m_parent->m_left;
-					if (buf->base.m_rcolour)
+					node_type *buf = node_del->m_parent->m_left;
+					if (buf->m_rcolour)
 					{
-						buf->base.m_rcolour = false;
-						node_del->base.m_parent->m_rcolour = true;
-						rotate_right(node_del->base.m_parent);
-						buf = node_del->base.m_parent->m_left;
+						buf->m_rcolour = false;
+						node_del->m_parent->m_rcolour = true;
+						rotate_right(node_del->m_parent);
+						buf = node_del->m_parent->m_left;
 					}
-					if (!buf->base.m_right->m_rcolour && !buf->base.m_left->m_rcolour)
-						node_del = node_del->base.m_parent;
+					if (!buf->m_right->m_rcolour && !buf->m_left->m_rcolour)
+						node_del = node_del->m_parent;
 					else
 					{
-						if (!buf->base.m_left->m_rcolour)
+						if (!buf->m_left->m_rcolour)
 						{
-							buf->base.m_right->m_rcolour = false;
-							buf->base.m_rcolour = true;
+							buf->m_right->m_rcolour = false;
+							buf->m_rcolour = true;
 							rotate_left(buf);
-							buf = node_del->base.m_parent->m_left;
+							buf = node_del->m_parent->m_left;
 						}
-						buf->base.m_rcolour = node_del->base.m_parent->m_rcolour;
-						node_del->base.m_parent->m_rcolour = false;
-						buf->base.m_left->m_rcolour = false;
-						rotate_right(node_del->base.m_parent);
+						buf->m_rcolour = node_del->m_parent->m_rcolour;
+						node_del->m_parent->m_rcolour = false;
+						buf->m_left->m_rcolour = false;
+						rotate_right(node_del->m_parent);
 						node_del = m_root;
 					}
 				}
 			}
-			node_del->base.m_rcolour = false;
+			node_del->m_rcolour = false;
 		}
 
 
@@ -285,65 +367,89 @@ rbtBase sentinel = { NIL, NIL, 0, false};
 		{
 			node_type* tmp;
 
-			tmp = node->base.m_right;
-			node->base.m_right = tmp->base.m_left;
-			if (tmp->base.m_left != NIL)
-				tmp->base.m_left->m_parent = node;
-			if (tmp != NIL)
-				tmp->base.m_parent = node->base.m_parent;
-			if (node->base.m_parent)
+			tmp = node->m_right;
+			node->m_right = tmp->m_left;
+			if (tmp->m_left != nil)
+				tmp->m_left->m_parent = node;
+			if (tmp != nil)
+				tmp->m_parent = node->m_parent;
+			if (node->m_parent)
 			{
-				if (node == node->base.m_parent->m_left)
-					node->base.m_parent->m_left = tmp;
+				if (node == node->m_parent->m_left)
+					node->m_parent->m_left = tmp;
 				else
-					node->base.m_parent->m_right = tmp;
+					node->m_parent->m_right = tmp;
 			}
 			else
 				m_root = tmp;
-			tmp->base.m_left = node;
-			if (node != NIL)
-				node->base.m_parent = tmp;
+			tmp->m_left = node;
+			if (node != nil)
+				node->m_parent = tmp;
 		}
 
 		void					rotate_right(node_type *node)																// до конца не разобралась, что делать с цветами
 		{
 			node_type* tmp;
 
-			tmp = node->base.m_left;
-			node->base.m_left = tmp->base.m_right;
-			if (tmp->base.m_right != NIL)
-				tmp->base.m_right->m_parent = node;
-			if (tmp != NIL)
-				tmp->base.m_parent = node->base.m_parent;
-			if (node->base.m_parent)
+			tmp = node->m_left;
+			node->m_left = tmp->m_right;
+			if (tmp->m_right != nil)
+				tmp->m_right->m_parent = node;
+			if (tmp != nil)
+				tmp->m_parent = node->m_parent;
+			if (node->m_parent)
 			{
-				if (node == node->base.m_parent->m_right)
-					node->base.m_parent->m_right = tmp;
+				if (node == node->m_parent->m_right)
+					node->m_parent->m_right = tmp;
 				else
-					node->base.m_parent->m_left = tmp;
+					node->m_parent->m_left = tmp;
 			}
 			else
 				m_root = tmp;
-			tmp->base.m_right = node;
-			if (node != NIL)
-				node->base.m_parent = tmp;
+			tmp->m_right = node;
+			if (node != nil)
+				node->m_parent = tmp;
 		}
 
 		void					swap_colour(node_type *node)
 		{
-			node->base.m_left->m_rcolour = false;
-			node->base.m_right->m_rcolour = false;
-			node->base.m_rcolour = true;
+			node->m_left->m_rcolour = false;
+			node->m_right->m_rcolour = false;
+			node->m_rcolour = true;
 		}
 
+	public:
+		void _print(node_type *p, int indent)
+		{
+			if (p != NULL && p != nil) {
+				if (p->m_right != nil) {
+					_print(p->m_right, indent + 8);
+				}
+				if (indent) {
+					std::cout << std::setw(indent) << ' ';
+				}
+				if (p->m_right != nil) std::cout << " /\n" << std::setw(indent) << ' ';
+				if (p->m_rcolour)
+					std::cout << "\033[1;31m" << *p->value << "\033[0m" << "\n ";
+				else
+					std::cout << *p->value << "\n ";
+				if (p->m_left != nil)
+				{
+					std::cout << std::setw(indent) << ' ' << " \\\n";
+					_print(p->m_left, indent + 8);
+				}
+			}
+		}
 		void					balancing(node_type *node)
 		{
-			if (node->base.m_left->m_rcolour && node->base.m_left.m_left.m_rcolour)
-				rotate_right();
-			else if(node->base.m_left.m_rcolour && node->base.m_right.m_rcolour)
+			if (node->m_left->m_rcolour && node->m_left->m_left->m_rcolour)
+				rotate_right(node);
+			else if (node->m_right->m_rcolour && node->m_right->m_right->m_rcolour)
+				rotate_left(node);
+			else if(node->m_left->m_rcolour && node->m_right->m_rcolour)
 				swap_colour(node);
-			else if(!node->base.m_left->m_rcolour && node->base.m_right->m_rcolour)
-				rotate_left();
+			else if(!node->m_left->m_rcolour && node->m_right->m_rcolour)
+				rotate_left(node);
 		}
 	};
 }

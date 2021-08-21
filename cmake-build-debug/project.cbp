@@ -8,43 +8,43 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/scopycat/Documents/ft_containers/project/cmake-build-debug"/>
+				<Option working_dir="/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/Users/scopycat/Documents/ft_containers/project/cmake-build-debug"/>
+				<Option working_dir="/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/Users/scopycat/Documents/ft_containers/project/cmake-build-debug"/>
+				<Option working_dir="/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="project">
-				<Option output="/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/project" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/scopycat/Documents/ft_containers/project/cmake-build-debug"/>
+				<Option output="/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/project" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/scopycat/Documents/ft_containers/project/."/>
+					<Add directory="/Users/scopycat/Documents/ft_containers/for_fast_create/."/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
@@ -53,20 +53,20 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 project"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 project"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="project/fast">
-				<Option output="/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/project" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/scopycat/Documents/ft_containers/project/cmake-build-debug"/>
+				<Option output="/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/project" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/scopycat/Documents/ft_containers/project/."/>
+					<Add directory="/Users/scopycat/Documents/ft_containers/for_fast_create/."/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
@@ -75,44 +75,41 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 project/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 project/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/Iterator.hpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/Iterator.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/Stack.hpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/Stack.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/enable_if.hpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/dfsfgsdfs.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/main.cpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/enable_if.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/map.hpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/main.cpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/pair.hpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/pair.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/redblacktree.hpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/vector.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/vector.hpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.cpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/vector_test.cpp">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/vector_test.hpp">
-			<Option target="project"/>
-		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/project/CMakeLists.txt">
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
