@@ -47,7 +47,6 @@ namespace ft {
 			bool operator() (const value_type& x, const value_type& y) const { return compare(x.first, y.first); }
 		};
 	private:
-//		Base 		m_data;
 		Alloc		m_alloc;
 	public:
 		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
@@ -94,12 +93,12 @@ namespace ft {
 
 		iterator end()
 		{
-			return (Base::m_end);
+			return (Base::m_end ? Base::m_end->m_right : Base::m_end);
 		}
 
 		const_iterator end() const
 		{
-			return (Base::m_data);
+			return (Base::m_end->m_right);
 		}
 
 //		reverse_iterator rbegin() {}
@@ -122,12 +121,16 @@ namespace ft {
 
 		size_type max_size() const
 		{
-			return (m_alloc.max_size());
+			return (m_alloc.max_size() / 2);
 		}
 
 		mapped_type& operator[] (const key_type& k)
 		{
-			return (*((this->insert(make_pair(k, mapped_type()))).first)).second;
+			iterator it = find(k);
+			if (it != end())
+				return (it.GetNode()->value->second);
+			else
+				return ((insert(ft::make_pair(k, mapped_type()))).first).GetNode()->value->second;
 		}
 
 		pair<iterator,bool> insert (const value_type& val)
@@ -146,7 +149,7 @@ namespace ft {
 				typename enable_if<!is_integral<InputIterator>::value>::type * = 0)
 		{
 			for(; first != last; ++first)
-				insert(*first);
+				insert(ft::make_pair(first->first, first->second));
 		}
 
 		void erase (iterator position)
@@ -156,21 +159,28 @@ namespace ft {
 
 		size_type erase (const key_type& k)
 		{
-			Base::deleteNode(Base::findNode(*find(k)));
+			iterator it = find(k);
+			if (it == end())
+				return (0);
+			Base::deleteNode(Base::findNode(*it));
 			return (1);
 		}
 
 		void erase (iterator first, iterator last)
 		{
-			for(; first != last; ++first)
-				Base::deleteNode(Base::findNode(*first));
+			while (first != last)
+			{
+				iterator it = first;
+				++first;
+				Base::deleteNode(Base::findNode(*it));
+			}
 		}
 
 		void swap (map& x)
 		{
 			std::swap(Base::m_root, x.m_root);
 			std::swap(Base::m_begin, x.m_begin);
-			std::swap(Base::m_end, x.m_begin);
+			std::swap(Base::m_end, x.m_end);
 			std::swap(Base::m_size, x.m_size);
 			std::swap(Base::m_compare, x.m_compare);
 			std::swap(Base::m_alloc, x.m_alloc);
@@ -182,38 +192,111 @@ namespace ft {
 			erase(begin(), end());
 		}
 
-		key_compare key_comp() const {}
+		key_compare key_comp() const
+		{
 
-		value_compare value_comp() const {}
+		}
+
+		value_compare value_comp() const
+		{
+			
+		}
 
 		iterator find (const key_type& k)
 		{
 			return (Base::findNodebyKey(k));
 		}
 
-		const_iterator find (const key_type& k) const {}
+		const_iterator find (const key_type& k) const
+		{
+			return (Base::findNodebyKey(k));
+		}
 
-		size_type count (const key_type& k) const {}
+		size_type count (const key_type& k) const
+		{
+			return !(find(k) == end());
+		}
 
-		iterator lower_bound (const key_type& k) {}
+		iterator lower_bound (const key_type& k)
+		{
+			iterator it = find(k);
+			if (it != end())
+				return (it);
+			else
+				return (find_nearest(k, false));
+		}
 
-		const_iterator lower_bound (const key_type& k) const {}
+		const_iterator lower_bound (const key_type& k) const
+		{
+			const_iterator it = find(k);
+			if (it != end())
+				return (it);
+			else
+				return (find_nearest(k, false));
+		}
 
-		iterator upper_bound (const key_type& k) {}
+		iterator upper_bound (const key_type& k)
+		{
+			return (find_nearest(k, true));
+		}
 
-		const_iterator upper_bound (const key_type& k) const {}
+		const_iterator upper_bound (const key_type& k) const
+		{
+			return (find_nearest(k, true));
+		}
 
-		pair<const_iterator,const_iterator> equal_range (const key_type& k) const {}
+		pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+		{
+			const_iterator it1(lower_bound(k));
+			const_iterator it2(upper_bound(k));
+			pair<const_iterator, const_iterator> ret(it1, it2);
+			return (ret);
+		}
 
-		pair<iterator,iterator>             equal_range (const key_type& k) {}
+		pair<iterator,iterator>             equal_range (const key_type& k)
+		{
+			iterator it1(lower_bound(k));
+			iterator it2(upper_bound(k));
+//			pair<iterator, iterator> ret(it1, it2);
+//			return (ret);
+			return (ft::make_pair(it1, it2));
+		}
 
-		allocator_type get_allocator() const {}
+		allocator_type get_allocator() const
+		{
+			return (m_alloc);
+		}
 
 	public:
 		void print_map()
 		{
 			Base::_print(Base::m_root, 0);
 			std::cout << "\033[1;31m" << "--------------- end of tree ---------------" << "\033[0m" << "\n ";
+		}
+
+	private:
+		iterator find_nearest(const key_type& k, bool biger)
+		{
+			iterator it(Base::m_root);
+
+			while (it != NULL && (Base::m_compare(k, it.GetNode()->value->first) == biger))
+			{
+				if (biger)
+					--it;
+				else
+					++it;
+			}
+
+			while (it != NULL && (Base::m_compare(k, it.GetNode()->value->first) != biger))
+			{
+				if (biger)
+					++it;
+				else
+					--it;
+				if (it != NULL && (Base::m_compare(k, it.GetNode()->value->first) == biger))
+					return (biger ? it : ++it);
+			}
+			return (it);
 		}
 	};
 

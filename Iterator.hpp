@@ -131,7 +131,7 @@ namespace ft {
 
 		self_type &operator++()
 		{
-//			_node = increment(_node);
+			_node = _increment(_node);
 			return *this;
 		}
 
@@ -142,7 +142,7 @@ namespace ft {
 		}
 
 		self_type &operator--() {
-//			_node = decrement(_node);
+			_node = _decrement(_node);
 			return *this;
 		}
 
@@ -151,6 +151,46 @@ namespace ft {
 			self_type tmp = *this;
 //			this->_node = decrement(this->_node);
 			return tmp;
+		}
+
+		node_type* _increment(node_type* node)
+		{
+			node_type* it(node);
+
+			if (!it)
+				return (NULL);
+			if (it->m_right)
+			{
+				it = it->m_right;
+				while (it->m_left)
+					it = it->m_left;
+				return (it);
+			}
+			while (it->m_parent && it->m_parent->m_left != it)
+				it = it->m_parent;
+			if (it->m_parent && it->m_parent->m_left == it)
+				return (it->m_parent);
+			return (NULL);
+		}
+
+		node_type* _decrement(node_type* node)
+		{
+			node_type* it(node);
+
+			if (!it)
+				return (NULL);
+			if (it->m_left)
+			{
+				it = it->m_left;
+				while (it->m_right)
+					it = it->m_right;
+				return (it);
+			}
+			if (it->m_parent && it->m_parent->m_right == it)
+				return (it->m_parent);
+			while (it->m_parent && it->m_parent->m_right != it)
+				it = it->m_parent;
+			return (it->m_parent);
 		}
 
 		reference operator*() { return const_cast<reference>(*_node->value); }

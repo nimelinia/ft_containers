@@ -77,8 +77,12 @@ namespace ft
 		~redblacktree()
 		{
 			if (m_root != 0)
+			{
 				m_alloc.destroy(m_root->value);
-			m_alloc.deallocate(m_root->value, 1);
+//				node_allocator allocator;
+
+			}
+//			m_alloc.deallocate(m_root->value, 1);
 		}
 	protected:
 
@@ -127,7 +131,15 @@ namespace ft
 			}
 			else
 				m_root = x;
-
+			if (m_root == x)
+			{
+				m_begin = x;
+				m_end = x;
+			}
+			if (m_begin == x->m_parent && x->m_parent->m_left == x)
+				m_begin = x;
+			if (m_end == x->m_parent && x->m_parent->m_right == x)
+				m_end = x;
 			balance_after_insert(x);
 			m_size++;
 			return(x);
@@ -154,15 +166,12 @@ namespace ft
 				x = y->m_left;
 			else if (node_for_delete != m_root)
 				x = y->m_right;
-			else
+			else if (node_for_delete->m_left)
 				x = node_for_delete->m_left;
-
-			if (x != node_for_delete->m_left)
-				x->m_parent = y->m_parent;
 			else
-			{
-				x->m_parent = y->m_parent->m_left;
-			}
+				x = node_for_delete->m_right;
+			if (x)
+				x->m_parent = y->m_parent;
 			if (y->m_parent)
 			{
 				if (y == y->m_parent->m_left)
@@ -172,17 +181,42 @@ namespace ft
 			}
 			else
 				m_root = x;
-
+			if (node_for_delete == m_begin)
+			{
+				if (m_begin->m_right)
+					m_begin = m_begin->m_right;
+				while (m_begin->m_left)
+					m_begin = m_begin->m_left;
+				if (m_begin == node_for_delete && m_begin->m_parent)
+					m_begin = m_begin->m_parent;
+				while (m_begin->m_parent && m_compare(m_begin->m_parent->value->first, m_begin->value->first))
+					m_begin = m_begin->m_parent;
+			}
+			if (node_for_delete == m_end)
+			{
+				if (m_end->m_left)
+					m_end = m_end->m_left;
+				while (m_end->m_right)
+					m_end = m_end->m_right;
+				if (m_end == node_for_delete && m_end->m_parent)
+					m_end = m_end->m_parent;
+				while (m_end->m_parent && m_compare(m_end->value->first, m_end->m_parent->value->first))
+					m_end = m_end->m_parent;
+			}
 			if (y != node_for_delete)
 			{
 				node_for_delete->value = y->value;
 				if (node_for_delete->m_right->m_left->value == x->value)
 					node_for_delete->m_right->m_left = NULL;
 			}
-			if (!y->m_rcolour)
+			if (!y->m_rcolour && x)
 				balance_after_delete(x);
 			m_size--;
 			m_alloc.destroy(y->value);
+			m_alloc.deallocate(y->value, 1);
+			node_allocator allocator;
+			allocator.destroy(y);
+			allocator.deallocate(y, 1);
 		}
 
 		node_type* findNode(value_type value)
@@ -202,11 +236,11 @@ namespace ft
 			return (0);
 		}
 
-		node_type* findNodebyKey(key_type &key)
+		node_type* findNodebyKey(key_type &key)	const
 		{
 			node_type* it(m_root);
 
-			while (it != m_begin && it != m_end)
+			while (it != nil && it != nil)
 			{
 				if (m_compare(key, it->value->first))
 					it = it->m_left;
@@ -215,7 +249,7 @@ namespace ft
 				else
 					return (it);
 			}
-			return (m_end);
+			return (m_end->m_right);
 		}
 
 		void					balance_after_insert(node_type *node_ins)
@@ -301,31 +335,35 @@ namespace ft
 				if (node_del == node_del->m_parent->m_left)
 				{
 					node_type *buf = node_del->m_parent->m_right;
-					if (buf->m_rcolour)
+					if (buf && buf->m_rcolour)
 					{
 						buf->m_rcolour = false;
 						node_del->m_parent->m_rcolour = true;
 						rotate_left(node_del->m_parent);																// проверить, что моя функция делает то, что нужно
 						buf = node_del->m_parent->m_right;
 					}
-					if (!buf->m_left->m_rcolour && !buf->m_right->m_rcolour)
+					if (buf && buf->m_left && buf->m_right && !buf->m_left->m_rcolour && !buf->m_right->m_rcolour)
 					{
 						buf->m_rcolour = true;
 						node_del = node_del->m_parent;
 					}
 					else
 					{
-						if (!buf->m_right->m_rcolour)
+						if (buf && buf->m_right && buf->m_left && !buf->m_right->m_rcolour)
 						{
 							buf->m_left->m_rcolour = false;
 							buf->m_rcolour = true;
 							rotate_right(buf);																				// проверить, что моя функция делает то, что нужно и смотреть, не перекрашиваю я ли лишний раз
 							buf = node_del->m_parent->m_right;
 						}
-						buf->m_rcolour = node_del->m_parent->m_rcolour;
+						if (buf && buf->m_right)
+						{
+							buf->m_rcolour = node_del->m_parent->m_rcolour;
+							buf->m_right->m_rcolour = false;
+						}
 						node_del->m_parent->m_rcolour = false;
-						buf->m_right->m_rcolour = false;
-						rotate_left(node_del->m_parent);
+						if (node_del->m_parent->m_right)
+							rotate_left(node_del->m_parent);
 						node_del = m_root;
 					}
 				}
@@ -339,20 +377,23 @@ namespace ft
 						rotate_right(node_del->m_parent);
 						buf = node_del->m_parent->m_left;
 					}
-					if (!buf->m_right->m_rcolour && !buf->m_left->m_rcolour)
+					if (buf && !buf->m_right->m_rcolour && !buf->m_left->m_rcolour)
 						node_del = node_del->m_parent;
 					else
 					{
-						if (!buf->m_left->m_rcolour)
+						if (buf && !buf->m_left->m_rcolour)
 						{
 							buf->m_right->m_rcolour = false;
 							buf->m_rcolour = true;
 							rotate_left(buf);
 							buf = node_del->m_parent->m_left;
 						}
-						buf->m_rcolour = node_del->m_parent->m_rcolour;
+						if (buf)
+						{
+							buf->m_rcolour = node_del->m_parent->m_rcolour;
+							buf->m_left->m_rcolour = false;
+						}
 						node_del->m_parent->m_rcolour = false;
-						buf->m_left->m_rcolour = false;
 						rotate_right(node_del->m_parent);
 						node_del = m_root;
 					}
@@ -368,8 +409,9 @@ namespace ft
 			node_type* tmp;
 
 			tmp = node->m_right;
-			node->m_right = tmp->m_left;
-			if (tmp->m_left != nil)
+			if (tmp)
+				node->m_right = tmp->m_left;
+			if (tmp && tmp->m_left != nil)
 				tmp->m_left->m_parent = node;
 			if (tmp != nil)
 				tmp->m_parent = node->m_parent;
@@ -382,7 +424,8 @@ namespace ft
 			}
 			else
 				m_root = tmp;
-			tmp->m_left = node;
+			if (tmp)
+				tmp->m_left = node;
 			if (node != nil)
 				node->m_parent = tmp;
 		}
@@ -392,8 +435,9 @@ namespace ft
 			node_type* tmp;
 
 			tmp = node->m_left;
-			node->m_left = tmp->m_right;
-			if (tmp->m_right != nil)
+			if (tmp)
+				node->m_left = tmp->m_right;
+			if (tmp && tmp->m_right != nil)
 				tmp->m_right->m_parent = node;
 			if (tmp != nil)
 				tmp->m_parent = node->m_parent;
@@ -406,7 +450,8 @@ namespace ft
 			}
 			else
 				m_root = tmp;
-			tmp->m_right = node;
+			if (tmp)
+				tmp->m_right = node;
 			if (node != nil)
 				node->m_parent = tmp;
 		}

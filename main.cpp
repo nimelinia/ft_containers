@@ -12,6 +12,7 @@
 //#include <vector>
 #include "vector_test.hpp"
 #include "map.hpp"
+#include <map>
 //namespace ft = std;
 //#else
 //#include <Map.hpp>
@@ -57,41 +58,87 @@ int main(int argc, char** argv) {
 	ft::map<int, std::string>	map_;
 	ft::pair<int, std::string>	pair1 = ft::make_pair(1, "lalalla");
 	map_.insert(pair1);
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(2, "hello"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(0, "hellfo"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(-1, "ahellfo"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(3, "hellfo"));
-	map_.print_map();
-//	map_.erase(0);
+//	map_.print_map();
+	map_.erase(0);
 //	map_.print_map();
 	map_.insert(ft::make_pair(3, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(8, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(4, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(-27, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(-11, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(115, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(5, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(22, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(13, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(23, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(24, "lala"));
-	map_.print_map();
+//	map_.print_map();
 	map_.insert(ft::make_pair(25, "lala"));
+//	map_.print_map();
+	map_.erase(115);
 	map_.print_map();
+	std::cout << map_.count(28) << std::endl;
+	std::map<int, std::string> stanmap;
+	stanmap.insert(std::make_pair(1, "lalala"));
+	stanmap.insert(std::make_pair(4, "lalala"));
+	stanmap.insert(std::make_pair(26, "lalala"));
+	stanmap.insert(std::make_pair(9, "lalala"));
+	std::cout << stanmap.lower_bound(4)->first << " ---  " << stanmap.lower_bound(4)->second << std::endl;
+	std::cout << stanmap.lower_bound(8)->first << " ---  " << stanmap.lower_bound(8)->second << std::endl;
+	std::cout << *map_.lower_bound(4).GetNode()->value  << std::endl;
+	std::cout << *map_.lower_bound(9).GetNode()->value  << std::endl;
+	std::cout << stanmap.upper_bound(4)->first << " ---  " << stanmap.upper_bound(4)->second << std::endl;
+	std::cout << stanmap.upper_bound(8)->first << " ---  " << stanmap.upper_bound(8)->second << std::endl;
+//	std::cout << stanmap.upper_bound(26)->first << " ---  " << stanmap.upper_bound(26)->second << std::endl;
+	std::cout << stanmap.upper_bound(0)->first << " ---  " << stanmap.upper_bound(0)->second << std::endl;
+//	std::cout << stanmap.upper_bound(30)->first << " ---  " << stanmap.upper_bound(30)->second << std::endl;
+	std::cout << *map_.upper_bound(4).GetNode()->value  << std::endl;
+	std::cout << *map_.upper_bound(9).GetNode()->value  << std::endl;
+	std::cout << *map_.upper_bound(24).GetNode()->value  << std::endl;
+//	std::cout << *map_.upper_bound(25).GetNode()->value  << std::endl;
+	std::cout << stanmap.equal_range(4).first->first << " --- " << stanmap.equal_range(4).first->second << std::endl;
+	std::cout << stanmap.equal_range(4).second->first << " --- " << stanmap.equal_range(4).second->second << std::endl;
+	std::cout << *map_.equal_range(4).first.GetNode()->value << std::endl;
+	std::cout << *map_.equal_range(4).second.GetNode()->value << std::endl;
+	std::cout << sizeof(map_) << std::endl;
+	map_.clear();
+	std::cout << sizeof(map_) << std::endl;
+	std::cout << sizeof(stanmap) << std::endl;
+	stanmap.insert(std::make_pair(890, "aaaaaa"));
+	std::cout << sizeof(stanmap) << std::endl;
+	map_.print_map();
+	std::cout << map_.empty() << std::endl;
+	std::cout << map_.size() << std::endl;
+	std::cout << map_.max_size() << std::endl;
+	std::cout << stanmap.max_size() << std::endl;
+	std::cout << map_[-111] << "|" << std::endl;
+	std::cout << stanmap[-111] << "||" << std::endl;
+
+	ft::map<int, std::string> map2;
+	map2.insert(stanmap.begin(), stanmap.end());
+	map2.print_map();
+	map_.swap(map2);
+	map_.print_map();
+	map2.print_map();
+
 
 //	void print(treeNode* root, int deep) {
 //		if (!ft_null(root)) {

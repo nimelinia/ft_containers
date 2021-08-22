@@ -29,6 +29,8 @@ vector_test.hpp
 /Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.hpp
 map.hpp
 /Users/scopycat/Documents/ft_containers/for_fast_create/map.hpp
+map
+-
 stdlib.h
 -
 
@@ -63,10 +65,6 @@ stdexcept
 -
 limits
 -
-
-/Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.cpp
-vector_test.hpp
-/Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.hpp
 
 /Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.hpp
 vector.hpp
