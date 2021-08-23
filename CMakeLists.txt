@@ -8,11 +8,11 @@ include_directories(.)
 add_executable(project
 		main.cpp
 		vector.hpp
-		Stack.hpp
+		stack.hpp
 #		map.hpp
 		Iterator.hpp
 		vector_test.cpp
 		vector_test.hpp
 		enable_if.hpp
-		pair.hpp dfsfgsdfs.hpp)
+		pair.hpp map_test.cpp map_test.hpp)
 #		redblacktree.hpp)

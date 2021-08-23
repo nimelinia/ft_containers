@@ -153,6 +153,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+map_test.o: map_test.cpp.o
+.PHONY : map_test.o
+
+# target to build an object file
+map_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/map_test.cpp.o
+.PHONY : map_test.cpp.o
+
+map_test.i: map_test.cpp.i
+.PHONY : map_test.i
+
+# target to preprocess a source file
+map_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/map_test.cpp.i
+.PHONY : map_test.cpp.i
+
+map_test.s: map_test.cpp.s
+.PHONY : map_test.s
+
+# target to generate assembly for a file
+map_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/map_test.cpp.s
+.PHONY : map_test.cpp.s
+
 vector_test.o: vector_test.cpp.o
 .PHONY : vector_test.o
 
@@ -189,6 +213,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... map_test.o"
+	@echo "... map_test.i"
+	@echo "... map_test.s"
 	@echo "... vector_test.o"
 	@echo "... vector_test.i"
 	@echo "... vector_test.s"

@@ -6,10 +6,20 @@ CMakeFiles/project.dir/main.cpp.o: \
  ../enable_if.hpp \
  ../main.cpp \
  ../map.hpp \
+ ../map_test.hpp \
  ../pair.hpp \
  ../redblacktree.hpp \
+ ../stack.hpp \
  ../vector.hpp \
  ../vector_test.hpp
+CMakeFiles/project.dir/map_test.cpp.o: \
+ ../Iterator.hpp \
+ ../enable_if.hpp \
+ ../map.hpp \
+ ../map_test.cpp \
+ ../map_test.hpp \
+ ../pair.hpp \
+ ../redblacktree.hpp
 CMakeFiles/project.dir/vector_test.cpp.o: \
  ../Iterator.hpp \
  ../enable_if.hpp \

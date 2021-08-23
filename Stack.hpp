@@ -5,76 +5,96 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-namespace ft {
-	class Stack {
+#include <vector>
 
+namespace ft {
+
+	template <class T, class Container = std::vector<T> >
+	class stack
+	{
+		typedef T											value_type;
+		typedef Container									container_type;
+		typedef size_t										size_type;
+
+	public:
+		explicit stack (const container_type& ctnr = container_type()) : m_data(ctnr)
+		{
+		}
+
+		bool empty() const
+		{
+			return (m_data.size() == 0);
+		}
+
+		size_type size() const
+		{
+			return (m_data.size());
+		}
+
+		value_type& top()
+		{
+			return (m_data.back());
+		}
+
+		const value_type& top() const
+		{
+			return (m_data.back());
+		}
+
+		void push (const value_type& val)
+		{
+			m_data.push_back(val);
+		}
+
+		void pop()
+		{
+			m_data.pop_back();
+		}
+
+		container_type getMData() const
+		{
+			return m_data;
+		}
+
+	private:
+		container_type					m_data;
 	};
 
+	template <class T, class Container>
+	bool operator== (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return (lhs.getMData() == rhs.getMData());
+	}
+
+	template <class T, class Container>
+	bool operator!= (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return !(lhs == rhs);
+	}
+
+	template <class T, class Container>
+	bool operator<  (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return (lhs.getMData() < rhs.getMData());
+	}
+
+	template <class T, class Container>
+	bool operator<= (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return (lhs < rhs || lhs == rhs);
+	}
+
+	template <class T, class Container>
+	bool operator>  (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return !(lhs <= rhs);
+	}
+
+	template <class T, class Container>
+	bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return !(lhs < rhs);
+	}
 }
-
-
-//template <class T, class Cont = std::deque<T> >
-//class MutantStack : public std::stack<T, Cont>
-//{
-//public:
-//	MutantStack() : std::stack<T, Cont>() {}
-//	virtual ~MutantStack(){}
-//	MutantStack (const MutantStack<T, Cont> &other)
-//			: std::stack<T, Cont>()
-//	{
-//		*this = other;
-//	}
-//	MutantStack<T, Cont> &operator=(const MutantStack<T, Cont> &other)
-//	{
-//		this->c = other.c;
-//		return (*this);
-//	}
-//
-//
-//	typedef typename std::stack<T, Cont>::container_type::iterator					iterator;
-//	typedef typename std::stack<T, Cont>::container_type::const_iterator			const_iterator;
-//	typedef typename std::stack<T, Cont>::container_type::reverse_iterator			reverse_iterator;
-//	typedef typename std::stack<T, Cont>::container_type::const_reverse_iterator	const_reverse_iterator;
-//
-//	iterator				begin()
-//	{
-//		return (this->c.begin());
-//	};
-//
-//	iterator				end()
-//	{
-//		return (this->c.end());
-//	}
-//
-//	const_iterator			cbegin()
-//	{
-//		return (this->c.cbegin());
-//	}
-//
-//	const_iterator			cend()
-//	{
-//		return (this->c.cend());
-//	}
-//
-//	reverse_iterator		rbegin()
-//	{
-//		return (this->c.rbegin());
-//	}
-//
-//	reverse_iterator		rend()
-//	{
-//		return (this->c.rend());
-//	}
-//
-//	const_reverse_iterator	crbegin()
-//	{
-//		return (this->crbegin());
-//	}
-//
-//	const_reverse_iterator	crend()
-//	{
-//		return (this->crend());
-//	}
-//};
 
 #endif //STACK_HPP

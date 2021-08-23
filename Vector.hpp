@@ -17,24 +17,25 @@ namespace ft {
 	class vector
 	{
 	public:
-		typedef T																	value_type;								// тип элементов, которые хранятся в этом контейнере
+		typedef T																	value_type;
 		typedef vector<T, Alloc>													container_type;
 		typedef Alloc																allocator_type;
 		typedef T*																	pointer;
 		typedef const T*															const_pointer;
 		typedef T&																	reference;
 		typedef const T&															const_reference;
-		typedef T*																	iterator;
+		typedef vectIterator<T>														iterator;
 		typedef const T*															const_iterator;
-		typedef ReverseIterator<iterator>											reverse_iterator;
-		typedef ReverseIterator<const_iterator>										const_reverse_iterator;
+		typedef reverseIterator<iterator>											reverse_iterator;
+		typedef reverseIterator<const_iterator>										const_reverse_iterator;
+		typedef size_t																size_type;
 
 	private:
 		pointer																		m_begin;
 		pointer																		m_end;
-		size_t																		m_size;
+		size_type																	m_size;
 		Alloc																		m_alloc;
-		size_t																		m_capacity;
+		size_type																	m_capacity;
 
 	public:
 /*
@@ -42,12 +43,12 @@ namespace ft {
  */
 		vector() : m_begin(NULL), m_end(NULL), m_size(0), m_capacity(0) {}													// конструктор по умолчанию
 
-		explicit vector(size_t n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
+		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
 			m_size(n), m_alloc(alloc), m_capacity(n)																		// конструктор от количества элементов и элемента по умолчанию
 		{
 			m_begin = m_alloc.allocate(n);
 			m_end = m_begin + n;
-			for (size_t i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 				m_begin[i] = val;
 		}
 		template<class InputIterator>
@@ -57,7 +58,7 @@ namespace ft {
 		{
 			m_begin = m_alloc.allocate(last - first);
 			m_end = m_begin + m_size;
-			for (size_t i = 0; i < m_size; ++i)
+			for (size_type i = 0; i < m_size; ++i)
 				m_begin[i] = *(first + i);
 			m_capacity = m_size;
 		}
@@ -68,7 +69,7 @@ namespace ft {
 		{
 			m_begin = m_alloc.allocate(m_size);
 			m_end = m_begin + m_size;
-			for (size_t i = 0; i < m_size; ++i)
+			for (size_type i = 0; i < m_size; ++i)
 				m_begin[i] = other[i];
 		}
 /*
@@ -78,7 +79,7 @@ namespace ft {
 		{
 			if (empty())
 				return;
-			for (size_t i = 0; i < m_size; ++i)
+			for (size_type i = 0; i < m_size; ++i)
 				m_alloc.destroy(&m_begin[i]);
 			m_alloc.deallocate(m_begin, m_capacity);
 		}
@@ -96,27 +97,32 @@ namespace ft {
  */
 		iterator				begin()
 		{
-			return (m_begin);
+			return iterator(m_begin);
 		};
 
 		const_iterator			begin() const
 		{
-			return (m_begin);
+			return const_iterator(m_begin);
 		};
 
 		iterator				end()
 		{
-			return (m_end);
+			return iterator(m_end);
 		}
 
 		const_iterator			end() const
 		{
-			return (m_end);
+			return const_iterator(m_end);
 		}
 
 		reverse_iterator		rbegin()
 		{
 			return (reverse_iterator(end()));
+		}
+
+		reverse_iterator		rend()
+		{
+			return (reverse_iterator(begin()));
 		}
 
 		const_reverse_iterator	rbegin() const
@@ -137,7 +143,7 @@ namespace ft {
 		{
 			return (m_alloc.max_size());
 		}
-		void					resize(size_t n, const value_type& val = 0)													// позволяет увеличивать или уменьшать количество значений в контейнере
+		void					resize(size_type n, const value_type& val = 0)													// позволяет увеличивать или уменьшать количество значений в контейнере
 		{
 			if (n < m_size)
 			{
@@ -165,16 +171,16 @@ namespace ft {
 		{
 			return (m_size == 0);
 		}
-		void					reserve(size_t n)																			// позволяет увеличить размер capacity
+		void					reserve(size_type n)																			// позволяет увеличить размер capacity
 		{
 			if (n > this->max_size())
 				throw std::length_error("Больше максимального размера");
 			if (n > m_capacity)
 			{
 				pointer buf = m_alloc.allocate(n);
-				for (size_t i = 0; i < m_size; ++i)
+				for (size_type i = 0; i < m_size; ++i)
 					m_alloc.construct(&buf[i], m_begin[i]);
-				for (size_t i = 0; i < m_size; ++i)
+				for (size_type i = 0; i < m_size; ++i)
 					m_alloc.destroy(&m_begin[i]);
 				m_alloc.deallocate(m_begin, m_capacity);
 				m_capacity = n;
@@ -183,11 +189,11 @@ namespace ft {
 			}
 		}
 
-		reference				operator[] (size_t n)																		// оператор доступа к элементу контейнера по индексу (нет проверок), в случае обращения к индексу больше m_size - undefined behaiviour
+		reference				operator[] (size_type n)																		// оператор доступа к элементу контейнера по индексу (нет проверок), в случае обращения к индексу больше m_size - undefined behaiviour
 		{
 			return (*(m_begin + n));
 		}
-		const_reference			operator[] (size_t n) const
+		const_reference			operator[] (size_type n) const
 		{
 			return (*(m_begin + n));
 		}
@@ -236,13 +242,13 @@ namespace ft {
 		{
 			return !(*this < rhs);
 		}
-		reference				at(size_t n)																				// оператор доступа к элементу контейнера по индексу (есть проверки)
+		reference				at(size_type n)																				// оператор доступа к элементу контейнера по индексу (есть проверки)
 		{
 			if (n > m_size)
 				throw std::out_of_range("выход за пределы вектора");
 			return (m_begin[n]);
 		}
-		const_reference			at(size_t n) const
+		const_reference			at(size_type n) const
 		{
 			if (n > m_size)
 				throw std::out_of_range("выход за пределы вектора");
@@ -273,13 +279,13 @@ namespace ft {
 									typename enable_if<!is_integral<InputIterator>::value>::type * = 0)						// метод присвоения значений диапазону
 		{
 			this->clear();
-			for (pointer p = first; p != last; ++p)
+			for (iterator p = first; p != last; ++p)
 				push_back(*p);
 		}
-		void					assign (size_t n, const value_type& val)
+		void					assign (size_type n, const value_type& val)
 		{
 			this->clear();
-			for (size_t i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 				push_back(val);
 		}
 		void 					push_back(const value_type& val)															// добавляет элемент (уже существующий) в конец контейнера
@@ -309,7 +315,7 @@ namespace ft {
 
 			const ptrdiff_t n = position - m_begin;
 			if (m_size == m_capacity)
-				reserve(m_size + 1);
+				reserve(m_size * 2);
 			position = m_begin + n;
 			_move(position, m_end, 1);
 			m_alloc.construct(&m_begin[n], val);
@@ -318,18 +324,18 @@ namespace ft {
 			return (m_begin + n);
 		}
 
-		void					insert(iterator position, size_t n, const value_type& val)
+		void					insert(iterator position, size_type n, const value_type& val)
 		{
 			// проверить, что это правильный итератор
 
 			const ptrdiff_t dist = position - m_begin;
-			size_t pos = std::distance(m_begin, position);
+//			size_type pos = std::distance(m_begin, position);
 			if (m_size + n > m_capacity)
 				reserve(m_size + n);
 			position = m_begin + n;
 			_move(position, m_end, n);
-			for (size_t i = 0; i < n; ++i)
-				m_alloc.construct(&m_begin[pos + i], val);
+			for (size_type i = 0; i < n; ++i)
+				m_alloc.construct(&m_begin[dist + i], val);
 			m_size += n;
 			m_end = m_begin + m_size;
 		}
@@ -343,7 +349,7 @@ namespace ft {
 				reserve(m_size + n);
 			position = m_begin + pos;
 			_move(position - 1, m_end, n);
-			for (size_t i = 0; i < n; ++i)
+			for (size_type i = 0; i < n; ++i)
 			{
 				m_alloc.destroy(&m_begin[pos + i]);
 				m_alloc.construct(&m_begin[pos + i],*first);																		// переписать тут через конструкт
@@ -385,12 +391,12 @@ namespace ft {
 			m_size = 0;
 		}
 
-		size_t					getMSize() const
+		size_type 				getMSize() const
 		{
 			return m_size;
 		}
 
-		size_t					getMCapacity() const
+		size_type 				getMCapacity() const
 		{
 			return m_capacity;
 		}
@@ -409,7 +415,7 @@ namespace ft {
 				}
 			} else
 			{
-				for (size_t i = 1; i < n; ++i)
+				for (size_type i = 1; i < n; ++i)
 				{
 					m_alloc.construct(&m_begin[i + pos + count], m_begin[i + pos]);
 					m_alloc.destroy(&m_begin[i + pos]);

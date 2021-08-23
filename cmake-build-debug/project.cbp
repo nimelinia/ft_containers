@@ -85,19 +85,22 @@
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/Iterator.hpp">
 			<Option target="project"/>
 		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/Stack.hpp">
-			<Option target="project"/>
-		</Unit>
-		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/dfsfgsdfs.hpp">
-			<Option target="project"/>
-		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/enable_if.hpp">
 			<Option target="project"/>
 		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/main.cpp">
 			<Option target="project"/>
 		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/map_test.cpp">
+			<Option target="project"/>
+		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/map_test.hpp">
+			<Option target="project"/>
+		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/pair.hpp">
+			<Option target="project"/>
+		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/stack.hpp">
 			<Option target="project"/>
 		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/vector.hpp">

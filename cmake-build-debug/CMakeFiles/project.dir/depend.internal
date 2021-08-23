@@ -6,10 +6,20 @@ CMakeFiles/project.dir/main.cpp.o
  /Users/scopycat/Documents/ft_containers/for_fast_create/enable_if.hpp
  /Users/scopycat/Documents/ft_containers/for_fast_create/main.cpp
  /Users/scopycat/Documents/ft_containers/for_fast_create/map.hpp
+ /Users/scopycat/Documents/ft_containers/for_fast_create/map_test.hpp
  /Users/scopycat/Documents/ft_containers/for_fast_create/pair.hpp
  /Users/scopycat/Documents/ft_containers/for_fast_create/redblacktree.hpp
+ /Users/scopycat/Documents/ft_containers/for_fast_create/stack.hpp
  /Users/scopycat/Documents/ft_containers/for_fast_create/vector.hpp
  /Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.hpp
+CMakeFiles/project.dir/map_test.cpp.o
+ /Users/scopycat/Documents/ft_containers/for_fast_create/Iterator.hpp
+ /Users/scopycat/Documents/ft_containers/for_fast_create/enable_if.hpp
+ /Users/scopycat/Documents/ft_containers/for_fast_create/map.hpp
+ /Users/scopycat/Documents/ft_containers/for_fast_create/map_test.cpp
+ /Users/scopycat/Documents/ft_containers/for_fast_create/map_test.hpp
+ /Users/scopycat/Documents/ft_containers/for_fast_create/pair.hpp
+ /Users/scopycat/Documents/ft_containers/for_fast_create/redblacktree.hpp
 CMakeFiles/project.dir/vector_test.cpp.o
  /Users/scopycat/Documents/ft_containers/for_fast_create/Iterator.hpp
  /Users/scopycat/Documents/ft_containers/for_fast_create/enable_if.hpp

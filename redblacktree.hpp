@@ -6,6 +6,7 @@
 #define REDBLACKTREE_HPP
 
 #include <iomanip>
+#include <iostream>
 #include "pair.hpp"
 
 namespace ft
@@ -467,7 +468,8 @@ namespace ft
 		void _print(node_type *p, int indent)
 		{
 			if (p != NULL && p != nil) {
-				if (p->m_right != nil) {
+				if (p->m_right != nil)
+				{
 					_print(p->m_right, indent + 8);
 				}
 				if (indent) {
