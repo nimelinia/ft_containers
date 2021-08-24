@@ -177,6 +177,30 @@ map_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/map_test.cpp.s
 .PHONY : map_test.cpp.s
 
+stack_test.o: stack_test.cpp.o
+.PHONY : stack_test.o
+
+# target to build an object file
+stack_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/stack_test.cpp.o
+.PHONY : stack_test.cpp.o
+
+stack_test.i: stack_test.cpp.i
+.PHONY : stack_test.i
+
+# target to preprocess a source file
+stack_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/stack_test.cpp.i
+.PHONY : stack_test.cpp.i
+
+stack_test.s: stack_test.cpp.s
+.PHONY : stack_test.s
+
+# target to generate assembly for a file
+stack_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/stack_test.cpp.s
+.PHONY : stack_test.cpp.s
+
 vector_test.o: vector_test.cpp.o
 .PHONY : vector_test.o
 
@@ -216,6 +240,9 @@ help:
 	@echo "... map_test.o"
 	@echo "... map_test.i"
 	@echo "... map_test.s"
+	@echo "... stack_test.o"
+	@echo "... stack_test.i"
+	@echo "... stack_test.s"
 	@echo "... vector_test.o"
 	@echo "... vector_test.i"
 	@echo "... vector_test.s"

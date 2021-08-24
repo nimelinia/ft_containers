@@ -12,52 +12,53 @@ namespace ft {
 	template <class T, class Container = std::vector<T> >
 	class stack
 	{
+	protected:
 		typedef T											value_type;
 		typedef Container									container_type;
 		typedef size_t										size_type;
 
 	public:
-		explicit stack (const container_type& ctnr = container_type()) : m_data(ctnr)
+		explicit stack (const container_type& ctnr = container_type()) : c(ctnr)
 		{
 		}
 
 		bool empty() const
 		{
-			return (m_data.size() == 0);
+			return (c.size() == 0);
 		}
 
 		size_type size() const
 		{
-			return (m_data.size());
+			return (c.size());
 		}
 
 		value_type& top()
 		{
-			return (m_data.back());
+			return (c.back());
 		}
 
 		const value_type& top() const
 		{
-			return (m_data.back());
+			return (c.back());
 		}
 
 		void push (const value_type& val)
 		{
-			m_data.push_back(val);
+			c.push_back(val);
 		}
 
 		void pop()
 		{
-			m_data.pop_back();
+			c.pop_back();
 		}
 
 		container_type getMData() const
 		{
-			return m_data;
+			return c;
 		}
 
-	private:
-		container_type					m_data;
+	protected:
+		container_type					c;
 	};
 
 	template <class T, class Container>

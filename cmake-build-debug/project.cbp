@@ -103,6 +103,12 @@
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/stack.hpp">
 			<Option target="project"/>
 		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/stack_test.cpp">
+			<Option target="project"/>
+		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/stack_test.hpp">
+			<Option target="project"/>
+		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/vector.hpp">
 			<Option target="project"/>
 		</Unit>

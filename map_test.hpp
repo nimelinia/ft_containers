@@ -27,9 +27,12 @@ class map_test
 			ft::map<size_t, size_t>						random_int_my;
 			std::vector<size_t>							keys;
 
-			std::string								mistake;
+			std::string									mistake;
 
-
+			typedef std::map<size_t, std::string>::iterator			it;
+			typedef ft::map<size_t, std::string>::iterator			mit;
+			typedef std::map<size_t, std::string>::reverse_iterator	rit;
+			typedef ft::map<size_t, std::string>::reverse_iterator	mrit;
 
 		public:
 			map_test();

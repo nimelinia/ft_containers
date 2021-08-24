@@ -31,8 +31,8 @@ namespace ft {
 		typedef typename allocator_type::const_pointer										const_pointer;
 		typedef mapIterator<value_type>														iterator;
 		typedef mapIterator<const value_type>												const_iterator;
-//		typedef reverse_iterator<iterator> 													reverse_iterator;
-//		typedef revers_iterator<const_iterator>												const_reverse_iterator;
+		typedef reverseIterator<iterator> 													reverse_iterator;
+		typedef reverseIterator<const_iterator>												const_reverse_iterator;
 
 		class value_compare
 		{
@@ -46,22 +46,24 @@ namespace ft {
 			typedef value_type	second_argument_type;
 			bool operator() (const value_type& x, const value_type& y) const { return compare(x.first, y.first); }
 		};
+
 	private:
-		Alloc		m_alloc;
+		Alloc			m_alloc;
+		value_compare	m_v_compare;
 	public:
 		explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-			: Base()
+			: Base(), m_alloc(alloc), m_v_compare(comp)
 		{}
 
 		template <class InputIterator>
 		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
 			 const allocator_type& alloc = allocator_type(),
-			 typename enable_if<!is_integral<InputIterator>::value>::type * = 0) : Base()
+			 typename enable_if<!is_integral<InputIterator>::value>::type * = 0) : Base(), m_v_compare(comp)
 		{
 			this->insert(first, last);
 		}
 
-		map (const map& x)
+		map (const map& x) : m_v_compare(x.m_v_compare)
 		{
 			this->insert(x.begin(), x.end());
 		}
@@ -101,13 +103,25 @@ namespace ft {
 			return (Base::m_end->m_right);
 		}
 
-//		reverse_iterator rbegin() {}
-//
-//		const_reverse_iterator rbegin() const {}
-//
-//		reverse_iterator rend() {}
-//
-//		const_reverse_iterator rend() const {}
+		reverse_iterator rbegin()
+		{
+			return (reverse_iterator(Base::m_end));
+		}
+
+		reverse_iterator rend()
+		{
+			return (reverse_iterator(begin()));
+		}
+
+		const_reverse_iterator rbegin() const
+		{
+			return (const_reverse_iterator(end()));
+		}
+
+		const_reverse_iterator rend() const
+		{
+			return (const_reverse_iterator(end()));
+		}
 
 		bool empty() const
 		{
@@ -128,7 +142,7 @@ namespace ft {
 		{
 			iterator it = find(k);
 			if (it != end())
-				return (it.GetNode()->value->second);
+				return (it.GetNode()->ref_value().second);
 			else
 				return ((insert(ft::make_pair(k, mapped_type()))).first).GetNode()->value->second;
 		}
@@ -154,7 +168,8 @@ namespace ft {
 
 		void erase (iterator position)
 		{
-			Base::deleteNode(position);
+			if (position != end())
+				Base::deleteNode(position.GetNode());
 		}
 
 		size_type erase (const key_type& k)
@@ -189,25 +204,26 @@ namespace ft {
 
 		void clear()
 		{
-			erase(begin(), end());
+			if (size())
+				erase(begin(), end());
 		}
 
 		key_compare key_comp() const
 		{
-
+			return (Base::m_compare);
 		}
 
 		value_compare value_comp() const
 		{
-			
+			return (m_v_compare);
 		}
 
-		iterator find (const key_type& k)
+		iterator find(const key_type& k)
 		{
 			return (Base::findNodebyKey(k));
 		}
 
-		const_iterator find (const key_type& k) const
+		const_iterator find(const key_type& k) const
 		{
 			return (Base::findNodebyKey(k));
 		}
@@ -235,7 +251,7 @@ namespace ft {
 				return (find_nearest(k, false));
 		}
 
-		iterator upper_bound (const key_type& k)
+		iterator upper_bound(const key_type& k)
 		{
 			return (find_nearest(k, true));
 		}
@@ -245,7 +261,7 @@ namespace ft {
 			return (find_nearest(k, true));
 		}
 
-		pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+		pair<const_iterator,const_iterator> equal_range(const key_type& k) const
 		{
 			const_iterator it1(lower_bound(k));
 			const_iterator it2(upper_bound(k));
@@ -253,12 +269,10 @@ namespace ft {
 			return (ret);
 		}
 
-		pair<iterator,iterator>             equal_range (const key_type& k)
+		pair<iterator,iterator>             equal_range(const key_type& k)
 		{
 			iterator it1(lower_bound(k));
 			iterator it2(upper_bound(k));
-//			pair<iterator, iterator> ret(it1, it2);
-//			return (ret);
 			return (ft::make_pair(it1, it2));
 		}
 
@@ -267,11 +281,43 @@ namespace ft {
 			return (m_alloc);
 		}
 
+		bool operator==(const map &rhs) const
+		{
+			if (Base::m_size != rhs.size())
+				return (false);
+			return (ft::equal(begin(), end(), rhs.begin()));
+		}
+
+		bool operator!=(const map &rhs) const
+		{
+			return !(rhs == *this);
+		}
+
+		bool operator<(const map &rhs) const
+		{
+			return (ft::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end()));
+		}
+
+		bool operator>(const map &rhs) const
+		{
+			return rhs < *this;
+		}
+
+		bool operator<=(const map &rhs) const
+		{
+			return !(rhs < *this);
+		}
+
+		bool operator>=(const map &rhs) const
+		{
+			return !(*this < rhs);
+		}
+
 	public:
 		void print_map()
 		{
 			Base::_print(Base::m_root, 0);
-			std::cout << "\033[1;31m" << "--------------- end of tree ---------------" << "\033[0m" << "\n ";
+			std::cout << "\033[1;31m" << "--------------- end of tree ---------------" << "\033[0m" << "\n";
 		}
 
 	private:
@@ -279,6 +325,11 @@ namespace ft {
 		{
 			iterator it(Base::m_root);
 
+			if (Base::m_compare(k, Base::m_begin->value->first) && !biger)
+			{
+				iterator lit(Base::m_begin);
+				return (lit);
+			}
 			while (it != NULL && (Base::m_compare(k, it.GetNode()->value->first) == biger))
 			{
 				if (biger)
@@ -286,7 +337,6 @@ namespace ft {
 				else
 					++it;
 			}
-
 			while (it != NULL && (Base::m_compare(k, it.GetNode()->value->first) != biger))
 			{
 				if (biger)

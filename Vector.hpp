@@ -326,10 +326,7 @@ namespace ft {
 
 		void					insert(iterator position, size_type n, const value_type& val)
 		{
-			// проверить, что это правильный итератор
-
 			const ptrdiff_t dist = position - m_begin;
-//			size_type pos = std::distance(m_begin, position);
 			if (m_size + n > m_capacity)
 				reserve(m_size + n);
 			position = m_begin + n;

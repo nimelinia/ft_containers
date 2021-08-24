@@ -23,12 +23,19 @@ namespace ft
 		rbtNode() : value(), m_right(0), m_left(0), m_parent(0), m_rcolour(false)  {}
 		rbtNode(rbtNode *other) : value(other->value), m_right(other->m_right), m_left(other->m_left),
 			m_parent(other->m_parent), m_rcolour(other->m_rcolour) {}
+
+		Content& ref_value()
+		{
+			return (*value);
+		}
 	};
 
 	template <class Key, class Value, class Content, class Compare = std::less<Key>,
 			class Alloc = std::allocator<pair<const Key,Value> > >
 	class redblacktree
 	{
+	protected:
+
 		typedef ptrdiff_t															difference_type;
 		typedef Key																	key_type;
 		typedef Value																mapped_type;
@@ -69,9 +76,11 @@ namespace ft
 		size_type		m_size;
 		allocator_type	m_alloc;
 		key_compare		m_compare;
+//		bool			m_change;
 
 	public:
-		redblacktree() : nil(0), m_root(nil), m_begin(nil), m_end(nil), m_size(0)
+		redblacktree() : nil(), m_root(nil), m_begin(nil), m_end(nil), m_size(0)
+//		, m_change(false)
 		{
 		}
 
@@ -80,10 +89,7 @@ namespace ft
 			if (m_root != 0)
 			{
 				m_alloc.destroy(m_root->value);
-//				node_allocator allocator;
-
 			}
-//			m_alloc.deallocate(m_root->value, 1);
 		}
 	protected:
 
@@ -106,8 +112,11 @@ namespace ft
 			while (current != nil) {
 				if (value.first == current->value->first)
 				{
-					m_alloc.destroy(current->value);
-					m_alloc.construct(current->value, value);
+//					if (m_change)
+//					{
+//						m_alloc.destroy(current->value);
+//						m_alloc.construct(current->value, value);
+//					}
 					return (current);
 				}
 				parent = current;
@@ -207,7 +216,8 @@ namespace ft
 			if (y != node_for_delete)
 			{
 				node_for_delete->value = y->value;
-				if (node_for_delete->m_right->m_left->value == x->value)
+				if (x && node_for_delete->m_right && node_for_delete->m_right->m_left &&
+					node_for_delete->m_right->m_left->value == x->value)
 					node_for_delete->m_right->m_left = NULL;
 			}
 			if (!y->m_rcolour && x)
@@ -250,7 +260,7 @@ namespace ft
 				else
 					return (it);
 			}
-			return (m_end->m_right);
+			return (it);
 		}
 
 		void					balance_after_insert(node_type *node_ins)
@@ -371,18 +381,18 @@ namespace ft
 				else
 				{
 					node_type *buf = node_del->m_parent->m_left;
-					if (buf->m_rcolour)
+					if (buf && buf->m_rcolour)
 					{
 						buf->m_rcolour = false;
 						node_del->m_parent->m_rcolour = true;
 						rotate_right(node_del->m_parent);
 						buf = node_del->m_parent->m_left;
 					}
-					if (buf && !buf->m_right->m_rcolour && !buf->m_left->m_rcolour)
+					if (buf && buf->m_right && buf->m_left && !buf->m_right->m_rcolour && !buf->m_left->m_rcolour)
 						node_del = node_del->m_parent;
 					else
 					{
-						if (buf && !buf->m_left->m_rcolour)
+						if (buf && buf->m_right && buf->m_left && !buf->m_left->m_rcolour)
 						{
 							buf->m_right->m_rcolour = false;
 							buf->m_rcolour = true;
@@ -392,7 +402,8 @@ namespace ft
 						if (buf)
 						{
 							buf->m_rcolour = node_del->m_parent->m_rcolour;
-							buf->m_left->m_rcolour = false;
+							if (buf->m_left)
+								buf->m_left->m_rcolour = false;
 						}
 						node_del->m_parent->m_rcolour = false;
 						rotate_right(node_del->m_parent);
@@ -497,6 +508,19 @@ namespace ft
 				swap_colour(node);
 			else if(!node->m_left->m_rcolour && node->m_right->m_rcolour)
 				rotate_left(node);
+		}
+
+		node_type*				nodeNull()
+		{
+			node_allocator allocator;
+			node_type* tmp;
+			tmp = allocator.allocate(1);
+			tmp->value = NULL;
+			tmp->m_parent = m_end;
+			tmp->m_left = NULL;
+			tmp->m_right = NULL;
+			tmp->m_rcolour = false;
+			return (tmp);
 		}
 	};
 }

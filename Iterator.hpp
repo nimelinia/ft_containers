@@ -91,7 +91,7 @@ namespace ft {
 		reference operator*() const
 		{
 			iterator_type tmp = m_it;
-			tmp--;
+			--tmp;
 			return (*tmp);
 		};
 
@@ -103,7 +103,7 @@ namespace ft {
 
 		reverseIterator& operator++()
 		{
-			m_it--;
+			--m_it;
 			return (*this);
 		};
 
@@ -128,7 +128,7 @@ namespace ft {
 
 		reverseIterator& operator--()
 		{
-			m_it++;
+			++m_it;
 			return (*this);
 		};
 
@@ -349,13 +349,13 @@ namespace ft {
 	class mapIterator
 	{
 	public:
-		typedef std::bidirectional_iterator_tag               iterator_category;
-		typedef T                                             value_type;
-		typedef std::ptrdiff_t                                difference_type;
-		typedef value_type                                    *pointer;
-		typedef value_type                                    &reference;
-		typedef mapIterator<T>                                 self_type;
-		typedef rbtNode<typename std::remove_const<value_type>::type> node_type;
+		typedef std::bidirectional_iterator_tag							iterator_category;
+		typedef T														value_type;
+		typedef std::ptrdiff_t											difference_type;
+		typedef value_type												*pointer;
+		typedef value_type												&reference;
+		typedef mapIterator<T>											self_type;
+		typedef rbtNode<typename std::remove_const<value_type>::type>	node_type;
 		mapIterator(node_type *node = NULL) : _node(node) {};
 	private:
 		node_type *_node;
@@ -394,7 +394,7 @@ namespace ft {
 
 		self_type operator++(int) {
 			self_type tmp = *this;
-//			this->_node = increment(this->_node);
+			this->_node = increment(this->_node);
 			return tmp;
 		}
 
@@ -406,7 +406,7 @@ namespace ft {
 		self_type operator--(int)
 		{
 			self_type tmp = *this;
-//			this->_node = decrement(this->_node);
+			this->_node = decrement(this->_node);
 			return tmp;
 		}
 
@@ -419,7 +419,7 @@ namespace ft {
 			if (it->m_right)
 			{
 				it = it->m_right;
-				while (it->m_left)
+				while (it && it->m_left)
 					it = it->m_left;
 				return (it);
 			}
@@ -451,11 +451,39 @@ namespace ft {
 		}
 
 		reference operator*() { return const_cast<reference>(*_node->value); }
-		pointer operator->() { return &(_node->value); }
-
+		pointer operator->() { return (_node->value); }
 		reference operator*() const { return const_cast<reference>(*_node->value); }
-		pointer operator->() const { return &(_node->value); }
+		pointer operator->() const { return (_node->value); }
 		};
+
+		template<class InputIterator1, class InputIterator2>
+		bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
+		{
+			while (first1 != last1)
+			{
+				if (!(*first1 == *first2))
+					return false;
+				++first1;
+				++first2;
+			}
+				return true;
+		}
+
+		template<class InputIterator1, class InputIterator2>
+		bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
+			 InputIterator2 first2, InputIterator2 last2)
+		{
+			while (first1 != last1)
+			{
+				if (first2 == last2 || *first2 < *first1)
+					return false;
+				else if (*first1 < *first2)
+					return true;
+				++first1;
+				++first2;
+			}
+			return (first2 != last2);
+		}
 }
 
 #endif //ITERATOR_HPP

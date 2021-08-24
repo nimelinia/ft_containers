@@ -20,8 +20,6 @@ map_test::map_test()
 		random_str_my.insert(ft::make_pair(len_str, str_));
 		random_int_.insert(std::make_pair(number, len_str));
 		random_int_my.insert(ft::make_pair(number, len_str));
-		if (std::find(keys.begin(), keys.end(), len_str) != keys.end())
-			std::cout << "key repit " << std::to_string(len_str) << std::endl;
 		keys.push_back(len_str);
 	}
 }
@@ -40,16 +38,16 @@ bool map_test::map_compare(std::map<size_t, std::string> &stan, ft::map<size_t, 
 		mistake += std::to_string(stan.size());
 		return (false);
 	}
-	for (size_t i = 0; i < stan.size(); ++i)
+	for (size_t i = 0; i < keys.size(); ++i)
 	{
-		if (stan[i] != mine[i])
+		if (stan[keys[i]] != mine[keys[i]])
 		{
 			mistake = "differences in the elems with key ";
-			mistake += std::to_string(i);
+			mistake += std::to_string(keys[i]);
 			mistake += ", my is ";
-			mistake += mine[i];
+			mistake += mine[keys[i]];
 			mistake += ", and standard is ";
-			mistake += stan[i];
+			mistake += stan[keys[i]];
 			return (false);
 		}
 	}
@@ -96,51 +94,61 @@ bool map_test::map_compare(const std::string &other)
 	return (true);
 }
 
-//bool map_test::compare_riterators(std::map<size_t, std::string> &vect1, ft::map<size_t, std::string> &vect2)
-//{
-//	ritmy b = vect2.rbegin();
-//	for (rit a = vect1.rbegin(); a != vect1.rend(); ++a)
-//	{
-//		if (b == vect2.rend())
-//		{
-//			mistake += "find end of map before it is realy ends";
-//			return (false);
-//		}
-//		if (*a != *b)
-//		{
-//			mistake += "element of my vect is ";
-//			mistake += std::to_string(*b);
-//			mistake += ", and standart is ";
-//			mistake += std::to_string(*a);
-//			return (false);
-//		}
-//		++b;
-//	}
-//	return (true);
-//}
+bool map_test::compare_riterators(std::map<size_t, std::string> &map1, ft::map<size_t, std::string> &map2)
+{
+	mrit b = map2.rbegin();
+	for (rit a = map1.rbegin(); a != map1.rend(); ++a)
+	{
+		if (a == map1.rbegin())
+			continue;
+		if (b == map2.rend())
+		{
+			mistake += "find end of map before it is realy ends";
+			return (false);
+		}
+		if (a->first != b->first || a->second != b->second)
+		{
+			mistake += "element of my map with key ";
+			mistake += std::to_string(b->first);
+			mistake += " and value ";
+			mistake += b->second;
+			mistake += ", and standart with key ";
+			mistake += std::to_string(a->first);
+			mistake += " and value ";
+			mistake += a->second;
+			return (false);
+		}
+		++b;
+	}
+	return (true);
+}
 
-//bool map_test::compare_iterators(std::map<size_t, std::string> &vect1, ft::map<size_t, std::string> &vect2)
-//{
-//	itmy b = vect2.begin();
-//	for (it a = vect1.begin(); a != vect1.end(); ++a)
-//	{
-//		if (b == vect2.end())
-//		{
-//			mistake += "find end of map before it is realy ends";
-//			return (false);
-//		}
-//		if (*a != *b)
-//		{
-//			mistake += "element of my vect is ";
-//			mistake += std::to_string(*b);
-//			mistake += ", and standart is ";
-//			mistake += std::to_string(*a);
-//			return (false);
-//		}
-//		++b;
-//	}
-//	return (true);
-//}
+bool map_test::compare_iterators(std::map<size_t, std::string> &map1, ft::map<size_t, std::string> &map2)
+{
+	mit b = map2.begin();
+	for (it a = map1.begin(); a != map1.end(); ++a)
+	{
+		if (b == map2.end())
+		{
+			mistake += "find end of map before it is realy ends";
+			return (false);
+		}
+		if (a->first != b.GetNode()->value->first || a->second != b.GetNode()->value->second)
+		{
+			mistake += "element of my map with key ";
+			mistake += std::to_string(b.GetNode()->value->first);
+			mistake += " and value ";
+			mistake += b.GetNode()->value->second;
+			mistake += ", and standart with key ";
+			mistake += std::to_string(a->first);
+			mistake += " and value ";
+			mistake += a->second;
+			return (false);
+		}
+		++b;
+	}
+	return (true);
+}
 
 void	map_test::print_mistakes()
 {
@@ -157,101 +165,101 @@ void map_test::print_ok()
 
 void map_test::start_map_tests()
 {
-	std::cout << MAGENTA << "==================================start of map's tests==================================\n\n" << END;
+	std::cout << MAGENTA << "===================================start of map's tests====================================\n\n" << END;
 	std::cout << CYAN << "TEST OF CREATING MAP STRING--------------------------------------------------------" << END;
 	map_compare("test") ? print_ok() : print_mistakes();
 	std::cout << CYAN << "TEST OF CREATING MAP OF NUMBERS----------------------------------------------------" << END;
 	map_compare(1) ? print_ok() : print_mistakes();
 
-//	random_str_.reserve(1000);
-//	random_str_my.reserve(1000);
-//	std::cout << CYAN << "TEST OF map RESERVE-------------------------------------------------------------" << END;
+	ft::map<size_t, std::string> map_it(random_str_.begin(), random_str_.end());
+	std::cout << CYAN << "TEST OF ITERATOR'S CONSTRUCTOR-----------------------------------------------------" << END;
+	map_compare(random_str_, map_it) ? print_ok() : print_mistakes();
+
+	ft::map<size_t, std::string> map_copy(map_it);
+	std::cout << CYAN << "TEST OF COPY'S CONSTRUCTOR---------------------------------------------------------" << END;
+	map_compare(random_str_, map_copy) ? print_ok() : print_mistakes();
+
+	std::cout << CYAN << "TEST OF [] ------------------------------------------------------------------------" << END;
+	(random_str_[keys[0]] == random_str_my[keys[0]]) ? print_ok() : print_mistakes();
+
+	random_str_[keys[0]] = "testtest";
+	random_str_my[keys[0]] = "testtest";
+	std::cout << CYAN << "TEST OF [] ASSIGNMENT--------------------------------------------------------------" << END;
+	map_compare("test") ? print_ok() : print_mistakes();
+
+	random_str_.insert(std::make_pair(0, "testovaya phraza"));
+	random_str_my.insert(ft::make_pair(0, "testovaya phraza"));
+	std::cout << CYAN << "TEST OF INSERT---------------------------------------------------------------------" << END;
+	map_compare("test") ? print_ok() : print_mistakes();
+
+	random_str_.erase(0);
+	random_str_my.erase(0);
+	std::cout << CYAN << "TEST OF ERASE----------------------------------------------------------------------" << END;
+	map_compare("test") ? print_ok() : print_mistakes();
+
+	size_t key;
+	if (random_str_.lower_bound(0) != random_str_.end())
+		key = random_str_.lower_bound(0)->first;
+	random_str_.erase(random_str_.lower_bound(0));
+	random_str_my.erase(random_str_my.lower_bound(0));
+	if (random_str_.lower_bound(0) != random_str_.end())
+		keys.erase(std::find(keys.begin(), keys.end(), key));
+	std::cout << CYAN << "TEST OF ERASE BY ITERATOR----------------------------------------------------------" << END;
+	map_compare("test") ? print_ok() : print_mistakes();
+
+//	if (random_str_.lower_bound(14) != random_str_.end())
+//		key = random_str_.lower_bound(14)->first;
+//	random_str_.erase(random_str_.lower_bound(14));
+//	random_str_my.erase(random_str_my.lower_bound(14));
+//	if (random_str_.lower_bound(14) != random_str_.end())
+//		keys.erase(std::find(keys.begin(), keys.end(), key));
+//	std::cout << CYAN << "TEST OF ERASE BY ITERATOR_2--------------------------------------------------------" << END;
 //	map_compare("test") ? print_ok() : print_mistakes();
-//
-//	std::map<int>	vect1(10, 5);
-//	ft::map<int>		vect2(10, 5);
-//	std::cout << CYAN << "TEST OF SECOND map CONSTRUCTOR--------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	ft::map<int>		vect3(vect2);
-//	std::cout << CYAN << "TEST OF COPY CONSTRUCTOR-----------------------------------------------------------" << END;
-//	map_compare(vect1, vect3) ? print_ok() : print_mistakes();
-//
-//	vect1.insert(vect1.begin() + 7, 0);
-//	vect2.insert(vect2.begin() + 7, 0);
-//	std::cout << CYAN << "TEST OF FIRST VARIANT OF INSERT----------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	vect1.insert(vect1.begin() + 3, 5, 1);
-//	vect2.insert(vect2.begin() + 3, 5, 1);
-//	std::cout << CYAN << "TEST OF SECOND VARIANT OF INSERT---------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	std::map<int>	vect5(5, 8);
-//	ft::map<int>		vect6(5, 8);
-//	vect1.insert(vect1.begin() + 1, vect5.begin() + 1, vect5.begin() + 4);
-//	vect2.insert(vect2.begin() + 1, vect6.begin() + 1, vect6.begin() + 4);
-//	std::cout << CYAN << "TEST OF THIRD VARIANT OF INSERT----------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	vect1.erase(vect1.begin() + 1);
-//	vect2.erase(vect2.begin() + 1);
-//	std::cout << CYAN << "TEST OF FIRST VARIANT OF ERASE-----------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	vect1.erase(vect1.begin() + 2, vect1.begin() + 4);
-//	vect2.erase(vect2.begin() + 2, vect2.begin() + 4);
-//	std::cout << CYAN << "TEST OF SECOND VARIANT OF ERASE----------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	vect1.clear();
-//	vect2.clear();
-//	std::cout << CYAN << "TEST OF CLEAR----------------------------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	vect1.swap(vect5);
-//	vect2.swap(vect6);
-//	std::cout << CYAN << "TEST OF SWAP-----------------------------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	vect1.assign(vect5.begin() + 1, vect5.begin() + 5);
-//	vect2.assign(vect6.begin() + 1, vect6.begin() + 5);
-//	std::cout << CYAN << "TEST OF ASSIGN_1-------------------------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	vect1.assign(3, 4);
-//	vect2.assign(3, 4);
-//
-//	std::cout << CYAN << "TEST OF ASSIGN_2-------------------------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	std::cout << CYAN << "TEST OF EXCEPTION IN AT------------------------------------------------------------" << END;
-//	try
-//	{
-//		vect2.at(12);
-//	}
-//	catch(std::exception &e)
-//	{
-//		print_ok();
-//		std::cout << BLUE <<  "[---------------------------------" << e.what()  << "--------------------------------]" << END << std::endl;
-//	}
-//
-//	vect1.resize(20);
-//	vect2.resize(20);
-//	std::cout << CYAN << "TEST OF RESIZE---------------------------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//
-//	vect1.push_back(111);
-//	vect2.push_back(111);
-//	std::cout << CYAN << "TEST OF PUSH_BACK------------------------------------------------------------------" << END;
-//	map_compare(vect1, vect2) ? print_ok() : print_mistakes();
-//	std::cout << CYAN << "TEST OF FRONT----------------------------------------------------------------------" << END;
-//	vect1.front() == vect2.front() ? print_ok() : print_mistakes();
-//	std::cout << CYAN << "TEST OF BACK-----------------------------------------------------------------------" << END;
-//	vect1.back() == vect2.back() ? print_ok() : print_mistakes();
-//	std::cout << CYAN << "TEST OF ITERATORS------------------------------------------------------------------" << END;
-//	compare_iterators(vect1, vect2) ? print_ok() : print_mistakes();
-//	std::cout << CYAN << "TEST OF REVERSE ITERATORS----------------------------------------------------------" << END;
-//	compare_riterators(vect1, vect2) ? print_ok() : print_mistakes();
-//	std::cout << std::endl;
+
+	std::cout << CYAN << "TEST OF COUNT----------------------------------------------------------------------" << END;
+	(random_str_.count(12) == random_str_my.count(12)) ? print_ok() : print_mistakes();
+
+	if (random_str_.lower_bound(20) != random_str_.end())
+		key = random_str_.lower_bound(20)->first;
+	random_str_.insert(random_str_.lower_bound(20), std::make_pair(21, "test_test_test"));
+	random_str_my.insert(random_str_my.lower_bound(20), ft::make_pair(21, "test_test_test"));
+	if (random_str_.lower_bound(20) != random_str_.end())
+		keys.push_back(key);
+	std::cout << CYAN << "TEST OF INSERT AND LOWER BOUND-----------------------------------------------------" << END;
+	map_compare("test") ? print_ok() : print_mistakes();
+
+
+	map_it.swap(random_str_my);
+	std::cout << CYAN << "TEST OF SWAP-----------------------------------------------------------------------" << END;
+	map_compare(random_str_, map_it)? print_ok() : print_mistakes();
+	random_str_my.swap(map_it);
+
+	std::cout << CYAN << "TEST OF EQUAL RANGE----------------------------------------------------------------" << END;
+	(random_str_.equal_range(15).first->second == random_str_my.equal_range(15).first->second) ? print_ok() : print_mistakes();
+
+	std::cout << CYAN << "TEST OF ITERATORS------------------------------------------------------------------" << END;
+	compare_iterators(random_str_, random_str_my)? print_ok() : print_mistakes();
+
+	std::cout << CYAN << "TEST OF REVERSE ITERATORS----------------------------------------------------------" << END;
+	compare_riterators(random_str_, random_str_my)? print_ok() : print_mistakes();
+
+	std::cout << CYAN << "TEST OF EMPTY----------------------------------------------------------------------" << END;
+	(random_str_.empty() == random_str_my.empty()) ? print_ok() : print_mistakes();
+
+	random_str_.clear();
+	random_str_my.clear();
+	std::cout << CYAN << "TEST OF CLEAR----------------------------------------------------------------------" << END;
+	(random_str_.empty() == random_str_my.empty()) ? print_ok() : print_mistakes();
+
+	std::cout << CYAN << "TEST OF NON-EQUALITY---------------------------------------------------------------" << END;
+	(map_it != random_str_my) ? print_ok() : print_mistakes();
+
+	ft::map<size_t, std::string> map_2(map_it);
+	std::cout << CYAN << "TEST OF EQUALITY-------------------------------------------------------------------" << END;
+	(map_it == map_2) ? print_ok() : print_mistakes();
+
+	map_it[0] = "a";
+	std::cout << CYAN << "TEST OF LEXICOGRAPHICAL COMPARE----------------------------------------------------" << END;
+	(map_it < map_2) ? print_ok() : print_mistakes();
+	std::cout << std::endl;
 }

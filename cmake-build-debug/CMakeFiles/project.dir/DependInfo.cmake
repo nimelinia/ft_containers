@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/scopycat/Documents/ft_containers/for_fast_create/main.cpp" "/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/CMakeFiles/project.dir/main.cpp.o"
   "/Users/scopycat/Documents/ft_containers/for_fast_create/map_test.cpp" "/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/CMakeFiles/project.dir/map_test.cpp.o"
+  "/Users/scopycat/Documents/ft_containers/for_fast_create/stack_test.cpp" "/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/CMakeFiles/project.dir/stack_test.cpp.o"
   "/Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.cpp" "/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/CMakeFiles/project.dir/vector_test.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")

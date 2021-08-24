@@ -6,49 +6,21 @@
 
 #IncludeRegexTransform: 
 
-/Users/scopycat/Documents/ft_containers/for_fast_create/Iterator.hpp
-redblacktree.hpp
-/Users/scopycat/Documents/ft_containers/for_fast_create/redblacktree.hpp
-enable_if.hpp
-/Users/scopycat/Documents/ft_containers/for_fast_create/enable_if.hpp
-iostream
--
-
-/Users/scopycat/Documents/ft_containers/for_fast_create/enable_if.hpp
-type_traits
--
-
-/Users/scopycat/Documents/ft_containers/for_fast_create/map.hpp
-Iterator.hpp
-/Users/scopycat/Documents/ft_containers/for_fast_create/Iterator.hpp
-redblacktree.hpp
-/Users/scopycat/Documents/ft_containers/for_fast_create/redblacktree.hpp
-iostream
--
-iomanip
--
-
-/Users/scopycat/Documents/ft_containers/for_fast_create/map_test.cpp
-map_test.hpp
-/Users/scopycat/Documents/ft_containers/for_fast_create/map_test.hpp
-
-/Users/scopycat/Documents/ft_containers/for_fast_create/map_test.hpp
-map.hpp
-/Users/scopycat/Documents/ft_containers/for_fast_create/map.hpp
-map
--
+/Users/scopycat/Documents/ft_containers/for_fast_create/stack.hpp
 vector
 -
 
-/Users/scopycat/Documents/ft_containers/for_fast_create/pair.hpp
-ostream
--
+/Users/scopycat/Documents/ft_containers/for_fast_create/stack_test.cpp
+stack_test.hpp
+/Users/scopycat/Documents/ft_containers/for_fast_create/stack_test.hpp
+stack_test.hpp
+/Users/scopycat/Documents/ft_containers/for_fast_create/stack_test.hpp
 
-/Users/scopycat/Documents/ft_containers/for_fast_create/redblacktree.hpp
-iomanip
+/Users/scopycat/Documents/ft_containers/for_fast_create/stack_test.hpp
+stack
 -
 iostream
 -
-pair.hpp
-/Users/scopycat/Documents/ft_containers/for_fast_create/pair.hpp
+stack.hpp
+/Users/scopycat/Documents/ft_containers/for_fast_create/stack.hpp
 

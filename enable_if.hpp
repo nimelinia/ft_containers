@@ -119,6 +119,8 @@ namespace ft {
 	{
 		const static bool value = is_integral_check<T>::value;
 	};
+
+
 }
 
 

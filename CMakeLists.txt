@@ -14,5 +14,5 @@ add_executable(project
 		vector_test.cpp
 		vector_test.hpp
 		enable_if.hpp
-		pair.hpp map_test.cpp map_test.hpp)
+		pair.hpp map_test.cpp map_test.hpp stack_test.cpp stack_test.hpp)
 #		redblacktree.hpp)
