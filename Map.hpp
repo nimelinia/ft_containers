@@ -349,8 +349,6 @@ namespace ft {
 			return (it);
 		}
 	};
-
 }
-
 
 #endif //MAP_HPP

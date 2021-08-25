@@ -420,7 +420,6 @@ namespace ft {
 			}
 		}
 	};
-
 }
 
 #endif //VECTOR_HPP

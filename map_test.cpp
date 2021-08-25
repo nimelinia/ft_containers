@@ -155,7 +155,6 @@ void	map_test::print_mistakes()
 	std::cout << RED << "[FAILED]" << END << std::endl;
 	std::cout << RED << mistake << END << std::endl;
 	mistake.clear();
-//	random_str_my.print_map();
 }
 
 void map_test::print_ok()

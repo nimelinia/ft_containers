@@ -62,10 +62,6 @@ namespace ft
 			typedef value_type 	second_argument_type;
 			bool operator() (const value_type & x, const value_type& y) const { return compare(x.first, y.first); }
 		};
-//		typedef tree_iterator<value_type, pointer, reference, Compare >				iterator;
-//		typedef tree_terator<value_type, const_pointer, const_reference, Compare >	const_iterator;
-//		typedef ReverseIterator<iterator>											reverse_iterator;
-//		typedef ReverseIterator<const_iterator>										const_reverse_iterator;
 
 	protected:
 		node_type		*nil;
@@ -76,12 +72,11 @@ namespace ft
 		size_type		m_size;
 		allocator_type	m_alloc;
 		key_compare		m_compare;
-//		bool			m_change;
 
 	public:
 		redblacktree() : nil(), m_root(nil), m_begin(nil), m_end(nil), m_size(0)
-//		, m_change(false)
 		{
+			nil = nodeNull();
 		}
 
 		~redblacktree()
@@ -103,55 +98,47 @@ namespace ft
 			return (x);
 		}
 
+		void					destroyNode(node_type *destroed_node)
+		{
+			node_allocator allocator;
+
+			m_alloc.destroy(destroed_node->value);
+			m_alloc.deallocate(destroed_node->value, 1);
+			allocator.destroy(destroed_node);
+			allocator.deallocate(destroed_node, 1);
+		}
+
 		node_type*				insertNode(value_type value)
 		{
 			node_type *current, *parent, *x;
 
 			current = m_root;
 			parent = 0;
-			while (current != nil) {
-				if (value.first == current->value->first)
-				{
-//					if (m_change)
-//					{
-//						m_alloc.destroy(current->value);
-//						m_alloc.construct(current->value, value);
-//					}
+			while (current != nil)
+			{
+				if (is_equal(value, current->value))
 					return (current);
-				}
 				parent = current;
-				if (m_compare(value.first, current->value->first))
-					current = current->m_left;
-				else
-					current = current->m_right;
+				current = m_compare(value, current->value) ? current->left : current->right;
 			}
-
 			x = createNode(value);
-			x->m_parent = parent;
-			x->m_left = nil;
-			x->m_right = nil;
-			x->m_rcolour = true;
+			x->parent = parent;
+			x->left = nil;
+			x->right = nil;
+			x->color = true;
 
 			if (parent)
 			{
-				if(m_compare(value.first, parent->value->first))
-					parent->m_left = x;
+				if(m_compare(value, parent->value))
+					parent->left = x;
 				else
-					parent->m_right = x;
-			}
-			else
-				m_root = x;
-			if (m_root == x)
+					parent->right = x;
+			} else
 			{
-				m_begin = x;
-				m_end = x;
+				m_root = x;
 			}
-			if (m_begin == x->m_parent && x->m_parent->m_left == x)
-				m_begin = x;
-			if (m_end == x->m_parent && x->m_parent->m_right == x)
-				m_end = x;
-			balance_after_insert(x);
 			m_size++;
+			balance_after_insert(x);
 			return(x);
 		}
 
@@ -159,76 +146,168 @@ namespace ft
 		{
 			node_type *x, *y;
 
-			if (!node_for_delete || node_for_delete == nil)
+			if (!node_for_delete || node_for_delete == NIL)
 				return;
 
-
-			if (node_for_delete->m_left == nil || node_for_delete->m_right == nil)
+			if (node_for_delete->left == nil || node_for_delete->right == nil)
 				y = node_for_delete;
 			else
 			{
-				y = node_for_delete->m_right;
-				while (y->m_left != nil)
-					y = y->m_left;
+				y = node_for_delete->right;
+				while (y->left != nil)
+					y = y->left;
 			}
 
-			if (y->m_left != nil)
-				x = y->m_left;
-			else if (node_for_delete != m_root)
-				x = y->m_right;
-			else if (node_for_delete->m_left)
-				x = node_for_delete->m_left;
+			if (y->left != nil)
+				x = y->left;
 			else
-				x = node_for_delete->m_right;
-			if (x)
-				x->m_parent = y->m_parent;
-			if (y->m_parent)
+				x = y->right;
+
+			/* remove y from the parent chain */
+			x->parent = y->parent;
+			if (y->parent)
 			{
-				if (y == y->m_parent->m_left)
-					y->m_parent->m_left = x;
+				if (y == y->parent->left)
+					y->parent->left = x;
 				else
-					y->m_parent->m_right = x;
+					y->parent->right = x;
 			}
 			else
 				m_root = x;
-			if (node_for_delete == m_begin)
-			{
-				if (m_begin->m_right)
-					m_begin = m_begin->m_right;
-				while (m_begin->m_left)
-					m_begin = m_begin->m_left;
-				if (m_begin == node_for_delete && m_begin->m_parent)
-					m_begin = m_begin->m_parent;
-				while (m_begin->m_parent && m_compare(m_begin->m_parent->value->first, m_begin->value->first))
-					m_begin = m_begin->m_parent;
-			}
-			if (node_for_delete == m_end)
-			{
-				if (m_end->m_left)
-					m_end = m_end->m_left;
-				while (m_end->m_right)
-					m_end = m_end->m_right;
-				if (m_end == node_for_delete && m_end->m_parent)
-					m_end = m_end->m_parent;
-				while (m_end->m_parent && m_compare(m_end->value->first, m_end->m_parent->value->first))
-					m_end = m_end->m_parent;
-			}
+
 			if (y != node_for_delete)
-			{
-				node_for_delete->value = y->value;
-				if (x && node_for_delete->m_right && node_for_delete->m_right->m_left &&
-					node_for_delete->m_right->m_left->value == x->value)
-					node_for_delete->m_right->m_left = NULL;
-			}
-			if (!y->m_rcolour && x)
+				node_for_delete->data = y->data;
+			if (!y->color)
 				balance_after_delete(x);
+
+			destroyNode(y);
 			m_size--;
-			m_alloc.destroy(y->value);
-			m_alloc.deallocate(y->value, 1);
-			node_allocator allocator;
-			allocator.destroy(y);
-			allocator.deallocate(y, 1);
 		}
+
+
+
+
+//		node_type*				insertNode(value_type value)
+//		{
+//			node_type *current, *parent, *x;
+//
+//			current = m_root;
+//			parent = 0;
+//			while (current != nil) {
+//				if (value.first == current->value->first)
+//				{
+//					return (current);
+//				}
+//				parent = current;
+//				if (m_compare(value.first, current->value->first))
+//					current = current->m_left;
+//				else
+//					current = current->m_right;
+//			}
+//
+//			x = createNode(value);
+//			x->m_parent = parent;
+//			x->m_left = nil;
+//			x->m_right = nil;
+//			x->m_rcolour = true;
+//
+//			if (parent)
+//			{
+//				if(m_compare(value.first, parent->value->first))
+//					parent->m_left = x;
+//				else
+//					parent->m_right = x;
+//			}
+//			else
+//				m_root = x;
+//			if (m_root == x)
+//			{
+//				m_begin = x;
+//				m_end = x;
+//			}
+//			if (m_begin == x->m_parent && x->m_parent->m_left == x)
+//				m_begin = x;
+//			if (m_end == x->m_parent && x->m_parent->m_right == x)
+//				m_end = x;
+//			balance_after_insert(x);
+//			m_size++;
+//			return(x);
+//		}
+
+//		void					deleteNode(node_type *node_for_delete)
+//		{
+//			node_type *x, *y;
+//
+//			if (!node_for_delete || node_for_delete == nil)
+//				return;
+//
+//
+//			if (node_for_delete->m_left == nil || node_for_delete->m_right == nil)
+//				y = node_for_delete;
+//			else
+//			{
+//				y = node_for_delete->m_right;
+//				while (y->m_left != nil)
+//					y = y->m_left;
+//			}
+//
+//			if (y->m_left != nil)
+//				x = y->m_left;
+//			else if (node_for_delete != m_root)
+//				x = y->m_right;
+//			else if (node_for_delete->m_left)
+//				x = node_for_delete->m_left;
+//			else
+//				x = node_for_delete->m_right;
+//			if (x)
+//				x->m_parent = y->m_parent;
+//			if (y->m_parent)
+//			{
+//				if (y == y->m_parent->m_left)
+//					y->m_parent->m_left = x;
+//				else
+//					y->m_parent->m_right = x;
+//			}
+//			else
+//				m_root = x;
+//			if (node_for_delete == m_begin)
+//			{
+//				if (m_begin->m_right)
+//					m_begin = m_begin->m_right;
+//				while (m_begin->m_left)
+//					m_begin = m_begin->m_left;
+//				if (m_begin == node_for_delete && m_begin->m_parent)
+//					m_begin = m_begin->m_parent;
+//				while (m_begin->m_parent && m_compare(m_begin->m_parent->value->first, m_begin->value->first))
+//					m_begin = m_begin->m_parent;
+//			}
+//			if (node_for_delete == m_end)
+//			{
+//				if (m_end->m_left)
+//					m_end = m_end->m_left;
+//				while (m_end->m_right)
+//					m_end = m_end->m_right;
+//				if (m_end == node_for_delete && m_end->m_parent)
+//					m_end = m_end->m_parent;
+//				while (m_end->m_parent && m_compare(m_end->value->first, m_end->m_parent->value->first))
+//					m_end = m_end->m_parent;
+//			}
+//			if (y != node_for_delete)
+//			{
+//				node_for_delete->value = y->value;
+//				if (x && node_for_delete->m_right && node_for_delete->m_right->m_left &&
+//					node_for_delete->m_right->m_left->value == x->value)
+//					node_for_delete->m_right->m_left = NULL;
+//			}
+//			if (!y->m_rcolour && x)
+//				balance_after_delete(x);
+//			m_size--;
+//			m_alloc.destroy(y->value);
+//			m_alloc.deallocate(y->value, 1);
+//			node_allocator allocator;
+//			allocator.destroy(y);
+//			allocator.deallocate(y, 1);
+//		}
 
 		node_type* findNode(value_type value)
 		{
@@ -327,11 +406,6 @@ namespace ft
 						}
 					} else
 						break;
-//					{
-//						balancing(node_ins->m_parent);
-//						node_ins = node_ins->m_parent;
-//					}
-
 				}
 				rotate = false;
 			}
@@ -521,6 +595,14 @@ namespace ft
 			tmp->m_right = NULL;
 			tmp->m_rcolour = false;
 			return (tmp);
+		}
+
+	private:
+		bool		is_equal(value_type& v_1, value_type& v_2)
+		{
+			if (m_compare(v_1, v_2) || m_compare(v_2, v_1))
+				return (false);
+			return (true);
 		}
 	};
 }

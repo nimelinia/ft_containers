@@ -91,6 +91,9 @@
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/main.cpp">
 			<Option target="project"/>
 		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/map.hpp">
+			<Option target="project"/>
+		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/map_test.cpp">
 			<Option target="project"/>
 		</Unit>
@@ -98,6 +101,9 @@
 			<Option target="project"/>
 		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/pair.hpp">
+			<Option target="project"/>
+		</Unit>
+		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/redblacktree.hpp">
 			<Option target="project"/>
 		</Unit>
 		<Unit filename="/Users/scopycat/Documents/ft_containers/for_fast_create/stack.hpp">
