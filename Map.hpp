@@ -100,7 +100,8 @@ namespace ft {
 
 		const_iterator end() const
 		{
-			return (Base::m_end->m_right);
+//			return (Base::m_end->m_right);
+			return (Base::nil);
 		}
 
 		reverse_iterator rbegin()

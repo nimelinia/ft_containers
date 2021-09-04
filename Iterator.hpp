@@ -359,6 +359,7 @@ namespace ft {
 		mapIterator(node_type *node = NULL) : _node(node) {};
 	private:
 		node_type *_node;
+		node_type *nil_node;
 	public:
 		template<class Some>
 		mapIterator(const mapIterator<Some> &it, typename enable_if<!std::is_const<Some>::value>::type* = 0)
@@ -414,12 +415,17 @@ namespace ft {
 		{
 			node_type* it(node);
 
+			node_type* tmp(node);
+			while (tmp->m_right)
+				tmp = tmp->m_right;
+			nil_node = tmp;
+
 			if (!it)
-				return (NULL);
-			if (it->m_right)
+				return (nil_node);
+			if (it->m_right && it->m_right->value)
 			{
 				it = it->m_right;
-				while (it && it->m_left)
+				while (it->m_left && it->m_left->value)
 					it = it->m_left;
 				return (it);
 			}
@@ -427,7 +433,7 @@ namespace ft {
 				it = it->m_parent;
 			if (it->m_parent && it->m_parent->m_left == it)
 				return (it->m_parent);
-			return (NULL);
+			return (nil_node);
 		}
 
 		node_type* _decrement(node_type* node)
@@ -436,10 +442,10 @@ namespace ft {
 
 			if (!it)
 				return (NULL);
-			if (it->m_left)
+			if (it->m_left && it->m_left->value)
 			{
 				it = it->m_left;
-				while (it->m_right)
+				while (it->m_right && it->m_right->value)
 					it = it->m_right;
 				return (it);
 			}

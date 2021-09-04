@@ -18,10 +18,12 @@ map_test::map_test()
 		}
 		random_str_.insert(std::make_pair(len_str, str_));
 		random_str_my.insert(ft::make_pair(len_str, str_));
-		random_int_.insert(std::make_pair(number, len_str));
-		random_int_my.insert(ft::make_pair(number, len_str));
+		random_int_.insert(std::make_pair(len_str, number));
+		random_int_my.insert(ft::make_pair(len_str, number));
 		keys.push_back(len_str);
 	}
+	random_int_my.print_map();
+	random_str_my.print_map();
 }
 
 map_test::~map_test()

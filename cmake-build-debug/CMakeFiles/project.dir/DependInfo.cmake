@@ -1,27 +1,19 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
   "CXX"
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/scopycat/Documents/ft_containers/for_fast_create/main.cpp" "/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/CMakeFiles/project.dir/main.cpp.o"
-  "/Users/scopycat/Documents/ft_containers/for_fast_create/map_test.cpp" "/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/CMakeFiles/project.dir/map_test.cpp.o"
-  "/Users/scopycat/Documents/ft_containers/for_fast_create/stack_test.cpp" "/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/CMakeFiles/project.dir/stack_test.cpp.o"
-  "/Users/scopycat/Documents/ft_containers/for_fast_create/vector_test.cpp" "/Users/scopycat/Documents/ft_containers/for_fast_create/cmake-build-debug/CMakeFiles/project.dir/vector_test.cpp.o"
+  "/Users/nataliatroyanovskaya/scopycat/ft_conteiners/repo/main.cpp" "/Users/nataliatroyanovskaya/scopycat/ft_conteiners/repo/cmake-build-debug/CMakeFiles/project.dir/main.cpp.o"
+  "/Users/nataliatroyanovskaya/scopycat/ft_conteiners/repo/map_test.cpp" "/Users/nataliatroyanovskaya/scopycat/ft_conteiners/repo/cmake-build-debug/CMakeFiles/project.dir/map_test.cpp.o"
+  "/Users/nataliatroyanovskaya/scopycat/ft_conteiners/repo/stack_test.cpp" "/Users/nataliatroyanovskaya/scopycat/ft_conteiners/repo/cmake-build-debug/CMakeFiles/project.dir/stack_test.cpp.o"
+  "/Users/nataliatroyanovskaya/scopycat/ft_conteiners/repo/vector_test.cpp" "/Users/nataliatroyanovskaya/scopycat/ft_conteiners/repo/cmake-build-debug/CMakeFiles/project.dir/vector_test.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../."
-  )
-
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
   )
 
 # Targets to which this target links.

@@ -114,29 +114,38 @@ namespace ft
 
 			current = m_root;
 			parent = 0;
-			while (current != nil)
+			while (current && current != nil)
 			{
-				if (is_equal(value, current->value))
+				if (is_equal(value, *current->value))
 					return (current);
 				parent = current;
-				current = m_compare(value, current->value) ? current->left : current->right;
+				current = (m_compare(value.first, current->value->first)) ? current->m_left : current->m_right;
 			}
 			x = createNode(value);
-			x->parent = parent;
-			x->left = nil;
-			x->right = nil;
-			x->color = true;
+			x->m_parent = parent;
+			x->m_left = nil;
+			x->m_right = nil;
+			x->m_rcolour = true;
 
 			if (parent)
 			{
-				if(m_compare(value, parent->value))
-					parent->left = x;
+				if(m_compare(value.first, parent->value->first))
+					parent->m_left = x;
 				else
-					parent->right = x;
+					parent->m_right = x;
 			} else
 			{
 				m_root = x;
 			}
+			if (m_root == x)
+			{
+				m_begin = x;
+				m_end = x;
+			}
+			if (m_begin == x->m_parent && x->m_parent->m_left == x)
+				m_begin = x;
+			if (m_end == x->m_parent && x->m_parent->m_right == x)
+				m_end = x;
 			m_size++;
 			balance_after_insert(x);
 			return(x);
@@ -146,38 +155,61 @@ namespace ft
 		{
 			node_type *x, *y;
 
-			if (!node_for_delete || node_for_delete == NIL)
+			if (!node_for_delete || node_for_delete == nil)
 				return;
 
-			if (node_for_delete->left == nil || node_for_delete->right == nil)
+			if (node_for_delete->m_left == nil || node_for_delete->m_right == nil)
 				y = node_for_delete;
 			else
 			{
-				y = node_for_delete->right;
-				while (y->left != nil)
-					y = y->left;
+				y = node_for_delete->m_right;
+				while (y->m_left != nil)
+					y = y->m_left;
 			}
 
-			if (y->left != nil)
-				x = y->left;
+			if (y->m_left != nil)
+				x = y->m_left;
 			else
-				x = y->right;
+				x = y->m_right;
 
-			/* remove y from the parent chain */
-			x->parent = y->parent;
-			if (y->parent)
+			x->m_parent = y->m_parent;
+			if (y->m_parent)
 			{
-				if (y == y->parent->left)
-					y->parent->left = x;
+				if (y == y->m_parent->m_left)
+					y->m_parent->m_left = x;
 				else
-					y->parent->right = x;
+					y->m_parent->m_right = x;
 			}
 			else
 				m_root = x;
 
+			if (node_for_delete == m_begin)
+			{
+				if (m_begin->m_right != nil)
+					m_begin = m_begin->m_right;
+				while (m_begin->m_left != nil)
+					m_begin = m_begin->m_left;
+				if (m_begin == node_for_delete && m_begin->m_parent)
+					m_begin = m_begin->m_parent;
+				while (m_begin->m_parent && m_compare(m_begin->m_parent->value->first, m_begin->value->first))
+					m_begin = m_begin->m_parent;
+			}
+			if (node_for_delete == m_end)
+			{
+				if (m_end->m_left != nil)
+					m_end = m_end->m_left;
+				while (m_end->m_right != nil)
+					m_end = m_end->m_right;
+				if (m_end == node_for_delete && m_end->m_parent)
+					m_end = m_end->m_parent;
+				while (m_end->m_parent && m_compare(m_end->value->first, m_end->m_parent->value->first))
+					m_end = m_end->m_parent;
+			}
+
+
 			if (y != node_for_delete)
-				node_for_delete->data = y->data;
-			if (!y->color)
+				node_for_delete->value = y->value;
+			if (!y->m_rcolour)
 				balance_after_delete(x);
 
 			destroyNode(y);
@@ -495,26 +527,47 @@ namespace ft
 			node_type* tmp;
 
 			tmp = node->m_right;
-			if (tmp)
-				node->m_right = tmp->m_left;
-			if (tmp && tmp->m_left != nil)
+			node->m_right = tmp->m_left;
+			if (tmp->m_left != nil)
 				tmp->m_left->m_parent = node;
-			if (tmp != nil)
-				tmp->m_parent = node->m_parent;
-			if (node->m_parent)
-			{
-				if (node == node->m_parent->m_left)
-					node->m_parent->m_left = tmp;
-				else
-					node->m_parent->m_right = tmp;
-			}
-			else
+			tmp->m_parent = node->m_parent;
+			if (!node->m_parent)
 				m_root = tmp;
-			if (tmp)
-				tmp->m_left = node;
-			if (node != nil)
-				node->m_parent = tmp;
+			else if (node == node->m_parent->m_left)
+				node->m_parent->m_left = tmp;
+			else
+				node->m_parent->m_right = tmp;
+			tmp->m_left = node;
+			node->m_parent = tmp;
 		}
+
+
+
+//		void					rotate_left(node_type *node)																// родитель, у которого два красных ребенка
+//		{
+//			node_type* tmp;
+//
+//			tmp = node->m_right;
+//			if (tmp)
+//				node->m_right = tmp->m_left;
+//			if (tmp && tmp->m_left != nil)
+//				tmp->m_left->m_parent = node;
+//			if (tmp != nil)
+//				tmp->m_parent = node->m_parent;
+//			if (node->m_parent)
+//			{
+//				if (node == node->m_parent->m_left)
+//					node->m_parent->m_left = tmp;
+//				else
+//					node->m_parent->m_right = tmp;
+//			}
+//			else
+//				m_root = tmp;
+//			if (tmp)
+//				tmp->m_left = node;
+//			if (node != nil)
+//				node->m_parent = tmp;
+//		}
 
 		void					rotate_right(node_type *node)																// до конца не разобралась, что делать с цветами
 		{
@@ -600,7 +653,7 @@ namespace ft
 	private:
 		bool		is_equal(value_type& v_1, value_type& v_2)
 		{
-			if (m_compare(v_1, v_2) || m_compare(v_2, v_1))
+			if (m_compare(v_1.first, v_2.first) || m_compare(v_2.first, v_1.first))
 				return (false);
 			return (true);
 		}
